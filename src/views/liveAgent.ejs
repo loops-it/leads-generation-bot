@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Hosting Cub Bot | Live Agent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <link rel="icon" href="favicon.png">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+  <style>
+    .container {
+      width: 360px;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .bot-message {
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #595E62;
+      display: flex;
+      align-items: end;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+      align-items: start;
+    }
+
+    .bot-message .messageWrapper div {
+      border: none;
+      border-radius: 8px;
+      max-width: 280px;
+      width: max-content;
+      padding: 10px;
+      border-top-left-radius: 0px;
+      font-size: 12px;
+      background-color: #1C73D4;
+      color: #fff !important;
+      display: flex;
+      flex-direction: column;
+      /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); */
+    }
+
+    .user-message {
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #595E62;
+      display: flex;
+      align-items: end;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: end;
+      align-items: end;
+    }
+
+    .user-message .messageWrapper div {
+      border: none;
+      border-radius: 10px;
+      max-width: 250px;
+      width: max-content;
+      padding: 10px;
+      border-bottom-right-radius: 0px;
+      margin-right: 0px;
+      font-size: 12px;
+      background-color: #F4F9FF;
+      display: flex !important;
+      justify-content: end !important;
+      text-align: start !important;
+    }
+
+    .user-message .message-image {
+      display: none;
+    }
+
+    /* .user-message div p{
+      width: 100%;
+    } */
+    .user-message .messageWrapper {
+      padding-right: 10px;
+      text-align: end;
+      align-self: end !important;
+    }
+
+    .user-message .messageWrapper .botname-message {
+      padding-right: 10px;
+      text-align: end;
+      align-self: end !important;
+    }
+
+    .background {
+      background: transparent;
+    }
+
+    #response {
+      width: 100%;
+      padding: 0px;
+      background-color: #fff;
+      border-radius: 25px;
+      height: 350px;
+      overflow: auto;
+      position: relative;
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+
+      /* Hide scrollbar for WebKit browsers */
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* Internet Explorer 10+ */
+    }
+
+    #response::-webkit-scrollbar {
+      display: none;
+    }
+
+    .message-image {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      margin-top: 10px;
+      border-radius: 50%;
+    }
+
+    .chat-submit-button {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background-color: transparent;
+      border-radius: 100%;
+      color: #1C73D4;
+      /* color: #BFBFBF; */
+      padding: 10px;
+      font-size: 20px;
+      line-height: 20px;
+      font-family: "Poppins", sans-serif;
+      border: solid 1px #1C73D4;
+    }
+
+    .chat-submit-button:hover {
+      background-color: transparent;
+    }
+
+    #questionForm {
+      position: relative;
+      padding: 10px;
+      padding-top: 0px;
+    }
+
+    .chat-header {
+      background-color: #1C73D4;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .chat-container {
+      padding: 10px;
+    }
+
+    .chat-input {
+      line-height: 30px;
+      border-radius: 0px;
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      padding-right: 45px !important;
+      border: none !important;
+    }
+
+    .chat-input:focus {
+      outline: none !important;
+      box-shadow: none
+    }
+
+    .chat-input::placeholder {
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      color: #BFBFBF;
+    }
+
+    .language-buttons button {
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      border-radius: 15px;
+      background-color: #2a0e45;
+      border: none;
+      color: #fff;
+      width: 100%;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    @media screen and (max-width: 600px) {
+      .background {
+        /* padding: 5px !important; */
+        margin-top: 10px;
+      }
+
+      .container {
+        width: 100% !important;
+        margin: 10px;
+        position: relative !important;
+        border: none;
+        border-radius: 8px;
+        height: 99vh;
+      }
+
+      #response {
+        width: 100%;
+        height: calc(100svh - 170px) !important;
+      }
+
+      #questionForm {
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        padding: 10px;
+        padding-top: 0px;
+      }
+    }
+
+    .closeButton {
+      background-color: transparent;
+      border: none;
+      border-radius: 100%;
+      font-size: 16px;
+      line-height: 16px;
+      width: 25px;
+      height: 25px;
+      color: #fff;
+      margin-right: 20px;
+      text-align: center;
+      padding: 0px;
+
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes visible {
+      0% {
+        visibility: hidden;
+      }
+
+      100% {
+        visibility: visible;
+      }
+    }
+
+    .loading {
+      animation: fadeIn 0.5s ease-in-out infinite alternate, visible 0.5s ease-in-out infinite alternate;
+    }
+
+    .typingmsg-wrapper {
+      background-color: #fff;
+      color: #000;
+    }
+
+    .typing-msg {
+      color: #000;
+      font-size: 25px;
+      padding: 5px !important;
+    }
+
+    .error-message {
+      background-color: #2a0e459c;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px !important;
+      margin-top: 10px;
+    }
+
+
+    #questionButtons button {
+      margin-bottom: 10px;
+    }
+
+
+
+    .chatDetails p {
+      color: #fff;
+      font-weight: 600;
+      font-size: 18px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .chatDetails span {
+      color: #fff;
+      font-weight: 300;
+      font-size: 11px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .botname-message {
+      color: #BFBFBF;
+      font-weight: 400;
+      font-size: 10px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .quickQuestionButton {
+      background-color: #1C73D4;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+      font-weight: 400;
+      font-size: 12px;
+      font-family: "Poppins", sans-serif;
+      padding: 8px;
+      text-align: start;
+    }
+
+    .quickQuestionButton i {
+      font-size: 20px;
+      padding-left: 10px;
+    }
+
+    .powerdTextBox {
+      background-color: #f7f7f7;
+      border-radius: 4px;
+    }
+
+    .powerdTextBox p {
+      color: #BFBFBF;
+      font-weight: 300;
+      font-size: 12px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .powerdTextBox span {
+      color: #1C73D4;
+      font-weight: 600;
+    }
+
+    .language-buttons button {
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      border-radius: 8px;
+      background-color: #1C73D4;
+      border: solid 1px #1C73D4;
+      color: #fff;
+      width: 100%;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      transition: color 0.5s ease-in-out, background-color 0.5s ease-in-out;
+    }
+
+    .language-buttons button:hover {
+      background-color: #fff;
+      color: #1C73D4;
+    }
+  </style>
+</head>
+
+<body class="background">
+  <div class="container my-0 p-0">
+    <div class="d-flex chat-header w-100 py-2 text-center justify-content-between align-items-center">
+      <div class="d-flex flex-row">
+        <div class="d-flex ps-3 pe-2 py-1 position-relative">
+          <img src="/agent.png" alt="" class="" style="height: 60px; width: auto;">
+          <span class="position-absolute start-100 translate-middle p-1 rounded-circle"
+            style="background-color: rgb(5, 233, 5); bottom: 0; margin-left: -20px !important;">
+            <span class="visually-hidden">New alerts</span>
+          </span>
+        </div>
+        <div class="d-flex flex-column chatDetails align-items-start justify-content-center">
+          <p class="mb-0">Hosting Cub Assistant</p>
+          <span class="mb-0">Online</span>
+        </div>
+      </div>
+      <button class="closeButton"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div class="d-flex chat-container">
+      <div id="response" class="">
+        <div class="d-flex justify-content-center align-items-center">
+          <!-- <img src="../chat-logo.webp" alt="" class="px-3 py-2 mb-3"> -->
+        </div>
+        <!-- <div class="bot-message">
+          <img class="message-image" src="/agent.png">
+
+          <div class="messageWrapper">
+            <span class="botname-message" id="OpenedTime1">ChatBot</span>
+            <div>
+              <p class="mb-0">Hi, How can I help you today!</p>
+            </div>
+          </div>
+        </div> -->
+        <div class="bot-message">
+          <img class="message-image" src="/agent.png">
+
+          <div class="messageWrapper">
+            <span class="botname-message" id="OpenedTime2"></span>
+            <div>
+              <p class="mb-2">Hello, Welcome to Hosting Cub. Please select the language to get started.</p>
+              <p class="mb-2">ආයුබෝවන්, Hosting Cub වෙත ඔබව සාදරයෙන් පිළිගනිමු. කරුණාකර ආරම්භ කිරීමට භාෂාව තෝරන්න.</p>
+              <p class="mb-0">வணக்கம், Hosting Cub வரவேற்கிறோம். தொடங்குவதற்கு மொழியைத் தேர்ந்தெடுக்கவும்.</p>
+            </div>
+            <span class="d-flex flex-row language-buttons w-100 p-0 m-0 mt-2">
+              <span class="col-4 pe-1">
+                <button id="changeToEnglishButton">English</button>
+              </span>
+              <span class="col-4 pe-1">
+                <button id="changeToSinhalaButton">Sinhala</button>
+              </span>
+              <span class="col-4">
+                <button id="changeToTamilButton">Tamil</button>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form id="questionForm" style="border-top: solid 1px #e0e0e0; padding-top: 10px;">
+      <input class="form-control chat-input" placeholder="Write message here..." id="question" name="question"
+        required></input>
+      <button type="submit" class="btn btn-light btn-lg chat-submit-button"><i class="bi bi-send-fill"></i></button>
+    </form>
+    <!-- <div class="d-flex px-3 pt-0 pb-2 w-100 justify-content-center align-items-center">
+      <div class="d-flex flex-row py-2 powerdTextBox text-center w-100 justify-content-center align-items-center">
+        <p class="mb-0">Powered By : <span>KodeTech</span></p>
+      </div>
+    </div> -->
+  </div>
+
+
+  <script>
+
+
+
+    function setFormattedOpenedTime() {
+      const OpenedTime = new Date();
+      let Opendhours = OpenedTime.getHours();
+      const Openedminutes = OpenedTime.getMinutes().toString().padStart(2, '0');
+      const Openedseconds = OpenedTime.getSeconds().toString().padStart(2, '0');
+      const Openedampm = Opendhours >= 12 ? 'PM' : 'AM';
+      Opendhours = Opendhours % 12;
+      Opendhours = Opendhours ? Opendhours : 12; // the hour '0' should be '12'
+      const formattedOpenedTime = `${Opendhours.toString().padStart(2, '0')}:${Openedminutes} ${Openedampm}`;
+
+      // document.getElementById('OpenedTime1').textContent = formattedOpenedTime;
+      document.getElementById('OpenedTime2').textContent = formattedOpenedTime;
+    }
+
+    // Call the function to set the time
+    setFormattedOpenedTime();
+
+
+
+    function displayAnswer(answer) {
+      appendMessageToResponse('bot', answer);
+    }
+
+    function appendMessageToResponse(role, content) {
+      const responseDiv = document.getElementById("response");
+      const messageDiv = document.createElement("div");
+
+
+
+
+      messageDiv.classList.add(role === 'user' ? "user-message" : "bot-message");
+
+
+      const image = document.createElement("img");
+      image.classList.add("message-image");
+      image.src = role === 'user' ? "/user.webp" : "/agent.png";
+
+
+      const listRegex = /^\d+\.\s.*$/gm;
+      const isList = listRegex.test(content);
+
+      let messageRole;
+      if (role === 'user') {
+        messageRole = "User"
+      }
+      else if (role === 'bot') {
+        messageRole = "ChatBot"
+      }
+      else {
+        messageRole = "Live Agent"
+      }
+
+
+      const currentTime = new Date();
+      let hours = currentTime.getHours();
+      const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+      const seconds = currentTime.getSeconds().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+
+
+      if (isList) {
+        const listItems = content.split('\n').map(item => {
+          return `<li style="margin-bottom: 10px !important;">${item}</li>`;
+        }).join('');
+        messageDiv.innerHTML = `
+      <div class="messageWrapper">
+        <span class="botname-message">${formattedTime}</span>
+        <div>
+          <ul style="list-style: none; padding: 0px !important">${listItems}</ul>
+        </div>
+      </div>`;
+      } else {
+        messageDiv.innerHTML = `
+      <div class="messageWrapper">
+        <span class="botname-message">${formattedTime}</span>
+        <div>
+          <p class="mb-0">${content}</p>
+        </div>
+      </div>`;
+      }
+
+      messageDiv.prepend(image);
+
+      responseDiv.appendChild(messageDiv);
+
+      responseDiv.scrollTop = responseDiv.scrollHeight;
+    }
+
+    // generateQuestionButtons();
+
+
+
+    // Initialize the chat history variable
+    let chatHistory = [];
+
+
+    // Function to append a typing animation message
+    function showTypingAnimation() {
+      const responseDiv = document.getElementById("response");
+      const typingMessage = document.createElement("div");
+      typingMessage.classList.add("bot-message");
+      typingMessage.innerHTML = `
+    <div class="typing-animation typingmsg-wrapper">
+      <i class="bi bi-three-dots loading typing-msg"></i>
+    </div>
+  `;
+      responseDiv.appendChild(typingMessage);
+      responseDiv.scrollTop = responseDiv.scrollHeight;
+    }
+
+    // Function to remove typing animation message
+    function hideTypingAnimation() {
+      const typingMessage = document.querySelector(".typing-animation");
+      if (typingMessage) {
+        typingMessage.remove();
+      }
+    }
+
+
+    // Function to handle errors
+    function handleErrorMessage(error) {
+      const responseDiv = document.getElementById("response");
+      let errorMessage = "<p class='error-message'>The allocated number of tokens are over, please ask the administrator to add more tokens to the system.</p>"; // Default error message
+
+      // Check if the error message matches the specific error condition
+      if (error.message === "The allocated number of tokens are over, please ask the administrator to add more tokens to the system.") {
+        errorMessage = "<p>The allocated number of tokens are over, please ask the administrator to add more tokens to the system.</p>";
+      }
+
+      responseDiv.innerHTML = errorMessage;
+    }
+
+
+
+    
+
+    function startCheckingForAgent(chatId) {
+      
+      let intervalId;
+    let agentJoined = false;
+
+    if (intervalId) {
+        clearInterval(intervalId);
+      }
+      console.log("Live chat enabled");
+
+      intervalId = setInterval(async () => {
+        console.log("Checking for agent...",chatId );
+        try {
+          const response = await fetch("/live-chat-agent", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ chatId: chatId }),
+          });
+
+          if (response.ok) {
+            const responseData = await response.json();
+            if (responseData.agent_id !== "unassigned") {
+              if (!agentJoined) {
+                showAlert("Now you are chatting with agent ID: " + responseData.agent_name);
+                agentJoined = true;
+              }
+              console.log("responseData ----> ", responseData)
+              if (responseData.agent_message !== null) {
+            appendMessageToResponse("liveagent", responseData.agent_message, chatId);
+          }
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching live chat data:", error);
+        }
+      }, 5000);
+
+      setTimeout(() => {
+        clearInterval(intervalId);
+        if (!agentJoined) {
+          showAlert("All agents are busy. Please try again later.");
+          console.log("No agents available. API call stopped.");
+        }
+      }, 120000);
+    }
+
+    function showAlert(message) {
+      const responseDiv = document.getElementById("response");
+      const alertDiv = document.createElement("div");
+      alertDiv.classList.add("alert", "alert-warning", "alert-dismissible", "fade", "show", "me-2");
+      alertDiv.setAttribute("role", "alert");
+      alertDiv.innerHTML = `
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+      responseDiv.appendChild(alertDiv);
+      alertDiv.scrollIntoView({ behavior: "smooth" });
+    }
+
+
+    document
+      .getElementById("questionForm")
+      .addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const questionInput = document.getElementById("question");
+        const question = questionInput.value;
+
+        document.getElementById("question").value = "";
+
+        const selectedLanguage = localStorage.getItem("selectedLanguage") || "English";
+        chatHistory.push({ role: "user", content: question });
+
+        appendMessageToResponse("user", question);
+
+        let liveChatID = localStorage.getItem("LiveagentChatID");
+        if (!liveChatID) {
+          // Generate and store a new chat ID if not already set
+          liveChatID = generateNewChatID(); // Define this function as per your logic
+          localStorage.setItem("LiveagentChatID", liveChatID);
+        }
+
+        const requestBody = {
+            chatId: liveChatID,
+            messages: chatHistory,
+            language: selectedLanguage || "English",
+        };
+        const requestBodyAgent = {
+            chatId: liveChatID,
+            user_message: question,
+            language: selectedLanguage || "English",
+        };
+
+        console.log("requestBody : ", requestBody);
+
+
+        try {
+          const responseLiveAgent = await fetch("/live-chat-user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBodyAgent),
+            });
+
+            const liveAgentData = await responseLiveAgent.json();
+            chatHistory = liveAgentData.chatHistory || []; // Update chat history
+
+            // Append the response to the response div
+
+            // checkForAgent();
+            startCheckingForAgent(liveChatID);
+            // Hide typing animation
+            // hideTypingAnimation();
+
+            // Clear the question input
+            questionInput.value = "";
+        } catch (error) {
+          console.error("Error starting agent check:", error);
+        }
+
+        questionInput.value = "";
+      });
+
+
+
+
+    async function connectLiveAgent(language) {
+      try {
+        const response = await fetch("/direct-connect-live-agent", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ language: language }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+
+        const responseData = await response.json(); // Parse the response as JSON
+        console.log(`Language changed to ${language}`);
+        console.log("response:", responseData);
+        localStorage.setItem('LiveagentChatID', responseData.chatId);
+
+
+      } catch (error) {
+        console.error("Error changing language:", error);
+      }
+    }
+
+    document.getElementById("changeToEnglishButton").addEventListener("click", function () {
+      localStorage.setItem('selectedLanguage', 'English');
+      appendLanguageMessage("Please ask your question in English.");
+      connectLiveAgent('English');
+
+    });
+
+    document.getElementById("changeToSinhalaButton").addEventListener("click", function () {
+      localStorage.setItem('selectedLanguage', 'Sinhala');
+      appendLanguageMessage("කරුණාකර ඔබේ ප්‍රශ්නය සිංහලෙන් අසන්න.");
+      connectLiveAgent('Sinhala');
+    });
+
+    document.getElementById("changeToTamilButton").addEventListener("click", function () {
+      localStorage.setItem('selectedLanguage', 'Tamil');
+      appendLanguageMessage("உங்கள் கேள்வியை தமிழில் கேளுங்கள்.");
+      connectLiveAgent('Tamil');
+    });
+
+    function appendLanguageMessage(content) {
+      const responseDiv = document.getElementById("response");
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("bot-message");
+
+      // Create an image element for the message
+      const image = document.createElement("img");
+      image.classList.add("message-image");
+      image.src = "/agent.png"; // Replace with actual bot image URL
+
+      const currentTime = new Date();
+      let hours = currentTime.getHours();
+      const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+      const seconds = currentTime.getSeconds().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+
+      // Use innerHTML to allow HTML formatting in the message
+      messageDiv.innerHTML = `<div class="messageWrapper">
+    <span class="botname-message">${formattedTime}</span>
+    <div>
+      <p class="mb-0">${content}</p>
+    </div>
+  </div>`;
+      messageDiv.prepend(image);
+
+      responseDiv.appendChild(messageDiv);
+      // Scroll down to the latest message
+      responseDiv.scrollTop = responseDiv.scrollHeight;
+    }
+  </script>
+</body>
+
+</html>

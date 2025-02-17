@@ -1,0 +1,218 @@
+<%- include('layouts/header.ejs') %>
+<%- include('layouts/admin-nav.ejs') %>
+<!-- Content Wrapper. Contains page content -->
+<style>
+    .chat-box-six{
+        height: 600px;
+        overflow: auto;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="container-full">
+        <div class="content-header">
+            <div class="d-flex align-items-center">
+                <div class="me-auto">
+                    <h4 class="page-title">Live Chats</h4>
+                    <div class="d-inline-block align-items-center">
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                <li class="breadcrumb-item" aria-current="page">Live Chats</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+            <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-img bbsr-0 bber-0" style="background: url('../images/gallery/full/10.jpg') center center;" data-overlay="5">
+                  <h3 class="widget-user-username text-white"><%= agent[0].name %></h3>
+                  <h6 class="widget-user-desc text-white">AGENT</h6>
+                </div>
+                <div class="widget-user-image">
+                  <img class="rounded-circle" src="/uploads/<%= agent[0].profile_picture %>" alt="User Avatar">
+                </div>
+                <div class="box-footer">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="description-block">
+                        <h5 class="description-header"><%= chat_count %></h5>
+                        <span class="description-text">No of Chats</span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <% 
+                                var timer_total = 0;
+                                if(timer[0]){
+                                    for (var c = 0; c < timer.length; c++) {
+                                         var timer_total = ((timer_total + timer[c].time))
+                                    }}
+                                    %>
+                    <div class="col-sm-4 be-1 bs-1">
+                      <div class="description-block">
+                        <h5 class="description-header"><%= (timer_total/60).toFixed(2) %></h5>
+                        <span class="description-text">Total Chat Time (Minutes)</span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-4">
+                      <div class="description-block">
+                        <h5 class="description-header"><%= ((timer_total/60)/chat_count).toFixed(2)%></h5>
+                        <span class="description-text">Average Chat Time (Minutes)</span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+              </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-4 col-12">
+                <div class="box dash-chat" id="chat-bx">
+                    <div class="box-body p-0">
+                        <ul class="nav nav-tabs customtab nav-justified" role="tablist">
+                            <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab" href="#messages" role="tab">Chats <span class="badge badge-pill mx-5" id="chat-count">0</span> </a> </li>
+                          
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="messages" role="tabpanel">
+                               
+                                <div class="chat-box-six2" id="main_chats">
+
+                                   
+                                </div>
+                            </div>
+                            							
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8 col-12">
+                <div class="row">
+                    <div class="col-xl-12 col-12" id="show_messages">
+                       
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+      </section>
+
+    
+    </div>
+</div>
+</div>
+<input type="hidden" id="selected_chat_id" value="">
+<%- include('layouts/footer.ejs') %>
+<script>
+    function GetLiveAllChats(message_id){
+    const message_data = {
+        message_id: message_id,
+        agent_id:  <%= agent[0].user_id %>,
+        profile_picture:  '<%= agent[0].profile_picture %>'
+    }
+        fetch("get-agent-live-chat-messages", {
+        method: "post",
+        body: JSON.stringify(message_data),
+        headers: {
+            "Content-Type" : "application/json"
+        }
+    }).then(res => res.json())
+    .then(data => {
+       if(data.status == "success"){
+        $('#show_messages').html(data.chats);
+        document.getElementById("selected_chat_id").value =message_id;
+       }
+       else{
+        
+       }
+    })
+    }
+    function RefreshChats(){
+    const message_data = {
+    agent_id:  <%= agent[0].user_id %>,
+    profile_picture:  '<%= agent[0].profile_picture %>'
+    }
+       
+        fetch("refresh-live-agent-chats", {
+        method: "post",
+        body: JSON.stringify(message_data),
+        headers: {
+            "Content-Type" : "application/json"
+        }
+    }).then(res => res.json())
+    .then(data => {
+       if(data.status == "success"){
+        $('#main_chats').html(data.chats);
+        document.getElementById("chat-count").textContent=data.chatsCount;
+       }
+       else{
+        
+       }
+    })
+    }
+function RefreshChatHistory(){
+const message_id =  document.getElementById("selected_chat_id").value;
+if(message_id == ""){
+
+} 
+else{
+const message_data = {
+    message_id: message_id,
+    profile_picture:  '<%= agent[0].profile_picture %>'
+}
+fetch("refresh-selected-agent-live-chat", {
+    
+body: JSON.stringify(message_data),
+method: "post",
+headers: {
+    "Content-Type" : "application/json"
+}
+}).then(res => res.json())
+.then(data => {
+if(data.status == "success"){
+$('#show_messages').html(data.chats);
+}
+else{
+
+}
+})
+}
+}
+function OnloadLiveAgentChats(){
+const message_data = {
+    agent_id:  <%= agent[0].user_id %>,
+    profile_picture:  '<%= agent[0].profile_picture %>'
+}
+fetch("onload-live-chat-history-chats", {
+method: "post",
+body: JSON.stringify(message_data),
+headers: {
+    "Content-Type" : "application/json"
+}
+}).then(res => res.json())
+.then(data => {
+if(data.status == "success"){
+$('#main_chats').html(data.chats);
+document.getElementById("chat-count").textContent=data.chatsCount;
+}
+else{
+
+}
+})
+}
+
+OnloadLiveAgentChats();
+setInterval(RefreshChats, 5000);
+setInterval(RefreshChatHistory, 5000);
+</script>

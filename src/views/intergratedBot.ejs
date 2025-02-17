@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Legal CRM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="favicon.png">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+    <style>
+        .container {
+            width: 360px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .bot-message {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            color: #595E62;
+            display: flex;
+            align-items: end;
+            font-family: "Poppins", sans-serif;
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+            align-items: start;
+        }
+
+        .bot-message .messageWrapper div {
+            border: none;
+            border-radius: 8px;
+            max-width: 280px;
+            /* width: max-content; */
+            padding: 10px;
+            border-top-left-radius: 0px;
+            font-size: 12px;
+            background-color: #1C73D4;
+            color: #fff !important;
+            display: flex;
+            flex-direction: column;
+            /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); */
+        }
+
+        .user-message {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            color: #595E62;
+            display: flex;
+            align-items: end;
+            font-family: "Poppins", sans-serif;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: end;
+            align-items: end;
+        }
+
+        .user-message .messageWrapper div {
+            border: none;
+            border-radius: 10px;
+            max-width: 250px;
+            width: max-content;
+            padding: 10px;
+            border-bottom-right-radius: 0px;
+            margin-right: 0px;
+            font-size: 12px;
+            background-color: #F4F9FF;
+            display: flex !important;
+            justify-content: end !important;
+            text-align: start !important;
+        }
+
+
+        .rate-message {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            color: #595E62;
+            display: flex;
+            align-items: end;
+            font-family: "Poppins", sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: start;
+        }
+
+        .rate-message .messageWrapper div {
+            border: none;
+            border-radius: 8px;
+            max-width: 280px;
+            /* width: max-content; */
+            padding: 10px;
+            border-top-left-radius: 0px;
+            font-size: 12px;
+            background-color: #1C73D4;
+            color: #fff !important;
+            display: flex;
+            flex-direction: column;
+            /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); */
+        }
+
+        .user-message .message-image {
+            display: none;
+        }
+
+        /* .user-message div p{
+      width: 100%;
+    } */
+        .user-message .messageWrapper {
+            padding-right: 10px;
+            text-align: end;
+            align-self: end !important;
+        }
+
+        .user-message .messageWrapper .botname-message {
+            padding-right: 10px;
+            text-align: end;
+            align-self: end !important;
+        }
+
+        .background {
+            background: transparent;
+        }
+
+        #response {
+            width: 100%;
+            padding: 0px;
+            background-color: #fff;
+            border-radius: 25px;
+            height: 350px;
+            overflow: auto;
+            position: relative;
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+
+            /* Hide scrollbar for WebKit browsers */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* Internet Explorer 10+ */
+        }
+
+        #response::-webkit-scrollbar {
+            display: none;
+        }
+
+        .message-image {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            margin-top: 10px;
+            border-radius: 50%;
+        }
+
+        .chat-submit-button {
+            /* position: absolute; */
+            right: 10px;
+            bottom: 10px;
+            background-color: transparent;
+            border-radius: 100%;
+            color: #1C73D4;
+            /* color: #BFBFBF; */
+            padding: 10px;
+            font-size: 20px;
+            line-height: 20px;
+            font-family: "Poppins", sans-serif;
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+            /* border: solid 1px #1C73D4; */
+        }
+
+        .recordButton {
+            background-color: transparent;
+            border-radius: 100%;
+            color: #1C73D4;
+            padding: 10px;
+            font-size: 20px;
+            line-height: 20px;
+            font-family: "Poppins", sans-serif;
+            width: 40px;
+            height: 40px;
+        }
+        .stop-speaking-button {
+            background-color: transparent;
+            border-radius: 100%;
+            color: red !important;
+            padding: 10px;
+            font-size: 20px;
+            line-height: 20px;
+            font-family: "Poppins", sans-serif;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* .chat-submit-button:hover {
+            background-color: transparent;
+        } */
+
+        #questionForm {
+            position: relative;
+            padding: 0px;
+            padding-top: 0px;
+        }
+
+        .chat-header {
+            background-color: #1C73D4;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .chat-container {
+            padding: 10px;
+        }
+
+        .chat-input {
+            line-height: 30px;
+            border-radius: 0px;
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+            padding-right: 45px !important;
+            border: none !important;
+        }
+
+        .chat-input:focus {
+            outline: none !important;
+            box-shadow: none
+        }
+
+        .chat-input::placeholder {
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+            color: #BFBFBF;
+        }
+
+        .language-buttons button {
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+            border-radius: 15px;
+            background-color: #1C73D4;
+            border: none;
+            color: #fff;
+            width: 100%;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .background {
+                /* padding: 5px !important; */
+                margin-top: 10px;
+            }
+
+            .container {
+                width: 100% !important;
+                margin: 10px;
+                position: relative !important;
+                border: none;
+                border-radius: 8px;
+                height: 99vh;
+            }
+
+            #response {
+                width: 100%;
+                height: calc(100svh - 170px) !important;
+            }
+
+            #questionForm {
+                position: relative;
+                bottom: 0;
+                width: 100%;
+                padding: 10px;
+                padding-top: 0px;
+            }
+        }
+
+        .closeButton {
+            background-color: transparent;
+            border: none;
+            border-radius: 100%;
+            font-size: 16px;
+            line-height: 16px;
+            width: 25px;
+            height: 25px;
+            color: #fff;
+            margin-right: 20px;
+            text-align: center;
+            padding: 0px;
+
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes visible {
+            0% {
+                visibility: hidden;
+            }
+
+            100% {
+                visibility: visible;
+            }
+        }
+
+        .loading {
+            animation: fadeIn 0.5s ease-in-out infinite alternate, visible 0.5s ease-in-out infinite alternate;
+        }
+
+        .typingmsg-wrapper {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .typing-msg {
+            color: #000;
+            font-size: 25px;
+            padding: 5px !important;
+        }
+
+        .error-message {
+            background-color: #2a0e459c;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px !important;
+            margin-top: 10px;
+        }
+
+
+        #questionButtons button {
+            margin-bottom: 10px;
+        }
+
+        #questionButtons li {
+            color: #595E62;
+            font-size: 12px;
+            margin: 10px 0px 0px 0px;
+        }
+
+
+        .chatDetails p {
+            color: #fff;
+            font-weight: 600;
+            font-size: 18px;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .chatDetails span {
+            color: #fff;
+            font-weight: 300;
+            font-size: 11px;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .botname-message {
+            color: #BFBFBF;
+            font-weight: 400;
+            font-size: 10px;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .quickQuestionButton {
+            background-color: #1C73D4;
+            border-radius: 5px;
+            border: none;
+            color: #fff;
+            font-weight: 400;
+            font-size: 12px;
+            font-family: "Poppins", sans-serif;
+            padding: 8px;
+            text-align: start;
+        }
+
+        .quickQuestionButton i {
+            font-size: 20px;
+            padding-left: 10px;
+        }
+
+        .powerdTextBox {
+            background-color: #f7f7f7;
+            border-radius: 4px;
+        }
+
+        .powerdTextBox p {
+            color: #BFBFBF;
+            font-weight: 300;
+            font-size: 12px;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .powerdTextBox span {
+            color: #1C73D4;
+            font-weight: 600;
+        }
+
+        .liveagentBtn {
+            background-color: #fff;
+            border-radius: 5px;
+            border: none;
+            color: #1C73D4;
+            font-weight: 400;
+            font-size: 12px;
+            font-family: "Poppins", sans-serif;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .btnNotoClose,
+        .btnYesToClose {
+            background-color: #1C73D4;
+            border-radius: 5px;
+            border: none;
+            color: #fff;
+            font-weight: 400;
+            font-size: 12px;
+            font-family: "Poppins", sans-serif;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .messageSubmitForm {}
+
+        .star-rating-form {
+            width: 280px;
+            border: solid 1px #1C73D4;
+        }
+
+        .rating-icon {
+            color: gold;
+        }
+
+
+        .btnRatingView {
+            background-color: #fff;
+            border-radius: 5px;
+            border: none;
+            color: #1C73D4;
+            font-weight: 400;
+            font-size: 12px;
+            font-family: "Poppins", sans-serif;
+            padding: 8px;
+            text-align: center;
+            min-width: 80px;
+        }
+
+
+        .bi-mic-mute-fill {
+            color: red !important;
+        }
+
+        #questionForm {
+            width: 100%;
+        }
+
+        .formLegalCRM{
+            border: solid 1px #fff;
+            border-radius: 4px;
+            background-color: transparent;
+        }
+        .formLegalCRM::placeholder{
+            color: #fff !important;
+        }
+    </style>
+</head>
+
+<body class="background">
+    <div class="container my-0 p-0">
+        <div class="d-flex chat-header w-100 py-2 text-center justify-content-between align-items-center">
+            <div class="d-flex flex-row">
+                <div class="d-flex ps-3 pe-2 py-1 position-relative">
+                    <img src="/agent.png" alt="" class="" style="height: 60px; width: auto;">
+                    <span class="position-absolute start-100 translate-middle p-1 rounded-circle"
+                        style="background-color: rgb(5, 233, 5); bottom: 0; margin-left: -20px !important;">
+                        <span class="visually-hidden">New alerts</span>
+                    </span>
+                </div>
+                <div class="d-flex flex-column chatDetails align-items-start justify-content-center">
+                    <p class="mb-0">Asistente de CRM legal</p>
+                    <span class="mb-0">En línea</span>
+                </div>
+            </div>
+            <button class="closeButton" onclick="chatCloseByUser()"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        <div class="d-flex chat-container">
+            <div id="response" class="">
+                <div class="d-flex justify-content-center align-items-center">
+                </div>
+                <div class="bot-message d-none">
+                    <img class="message-image" src="/agent.png">
+
+                    <div class="messageWrapper">
+                        <span class="botname-message" id="OpenedTime1">ChatBot</span>
+                        <div>
+                            <p class="mb-2">Hello, Welcome to Hosting Cub. Please select the language to get started.</p>
+                            <p class="mb-2">ආයුබෝවන්, Hosting Cub වෙත ඔබව සාදරයෙන් පිළිගනිමු. කරුණාකර ආරම්භ කිරීමට භාෂාව
+                                තෝරන්න.</p>
+                            <p class="mb-0">வணக்கம், Hosting Cub வரவேற்கிறோம். தொடங்குவதற்கு மொழியைத்
+                                தேர்ந்தெடுக்கவும்.</p>
+                        </div>
+                        <span class="d-flex flex-row language-buttons w-100 p-0 m-0 mt-2">
+                            <span class="col-4 pe-1">
+                                <button id="changeToEnglishButton">English</button>
+                            </span>
+                            <span class="col-4 pe-1">
+                                <button id="changeToSinhalaButton">Sinhala</button>
+                            </span>
+                            <span class="col-4">
+                                <button id="changeToTamilButton">Tamil</button>
+                            </span>
+                        </span>
+                        <span class="d-flex flex-row language-buttons w-100 p-0 m-0 mt-2">
+                            <span class="col-4 pe-1">
+                                <button id="changeToSinglish">Singlish</button>
+                            </span>
+                            <span class="col-4 pe-1">
+                                <button id="changeToTanglish">Tanglish</button>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-row" style="border-top: solid 1px #e0e0e0; padding-top: 10px;">
+            <form name="questionForm" id="questionForm" class="d-flex flex-row">
+                <div class="d-flex flex-column w-100">
+                    <input class="form-control chat-input" placeholder="Escribe un mensaje aquí..." id="question" name="question"
+                    required></input>
+                <input placeholder="මෙතන සිංග්ලිශ් වලින් ටයිප් කරන්න." onkeyup="startText();" onselect="startText();"
+                    onclick="startText();" class="form-control chat-input" id="box1" style="display:none;"></input>
+                <input placeholder="இங்கே Tanglish இல் தட்டச்சு செய்யவும்.." onkeyup="startTextTanglish();"
+                    onselect="startTextTanglish();" onclick="startTextTanglish();" class="form-control chat-input"
+                    id="box2" name="box2" style="display:none;"></input>
+                </div>
+                <button type="submit" class="btn btn-light btn-lg chat-submit-button">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </form>
+            
+            <button id="startRecording" class="btn btn-light btn-lg recordButton d-none">
+                <i id="startRecordingIcon" class="bi bi-mic-fill"></i>
+            </button>
+            <button id="stopSpeaking" class="btn btn-light btn-lg stop-speaking-button  d-none" style="display:none;">
+                <i class="bi bi-stop-fill"></i>
+            </button>
+        </div>
+        <!-- <div class="d-flex px-3 pt-0 pb-2 w-100 justify-content-center align-items-center">
+            <div class="d-flex flex-row py-2 powerdTextBox text-center w-100 justify-content-center align-items-center">
+                <p class="mb-0">Powered By : <span>KodeTech</span></p>
+            </div>
+        </div> -->
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=Z4kFdy6A"></script>
+    <script src="../scripts/VoiceBotScript.js" type="text/javascript"></script>
+    <script src="../scripts/singlish.js" type="text/javascript"></script>
+    <script src="../scripts/tanglish.js" type="text/javascript"></script>
+</body>
+
+</html>

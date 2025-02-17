@@ -1,0 +1,96 @@
+<%- include('layouts/header.ejs') %>
+<%- include('layouts/admin-nav.ejs') %>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="container-full">
+      <!-- Content Header (Page header) -->	  
+      <div class="content-header">
+          <div class="d-flex align-items-center">
+              <div class="me-auto">
+                  <h4 class="page-title">Add Admin</h4>
+                  <div class="d-inline-block align-items-center">
+                      <nav>
+                          <ol class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                              <li class="breadcrumb-item" aria-current="page">Add Admin</li>
+                          </ol>
+                      </nav>
+                  </div>
+              </div>
+              
+          </div>
+      </div>
+
+      <!-- Main content -->
+      <section class="content">
+          <div class="row">
+            <div class="col-lg-12 col-12">
+                <div class="box">
+                  <div class="box-header with-border">
+                    <h4 class="box-title">Add Admin</h4>
+                  </div>
+                  <!-- /.box-header -->
+                  <form class="form"  onsubmit="return false;" id="form">
+                      <div class="box-body">
+                        
+                          <div class="row">
+                            <div class="alert alert-success mt-2" role="alert" id="success" style="display: none;">
+                       
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="failed" style="display: none;">
+                             
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" placeholder="Name" id="admin_name" required>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" placeholder="Phone Number" id="phone" required>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">Email</label>
+                                  <input type="text" class="form-control" placeholder="Email" id="email" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">Password</label>
+                                  <input type="password" class="form-control" placeholder="Password" id="password" required>
+                                </div>
+                                <p style="color:red;display: none;" id="password-error"></p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">Confirm Password</label>
+                                  <input type="password" class="form-control" placeholder="Confirm Password"  id="confirm_password" required>
+                                </div>
+                               
+                            </div>
+                          </div>
+                      </div>
+                      <!-- /.box-body -->
+                      <div class="box-footer">
+                         
+                          <button type="submit" class="btn btn-primary">
+                            <i class="ti-save-alt"></i> Add Admin
+                          </button>
+                      </div>  
+                  </form>
+                </div>
+                <!-- /.box -->			
+          </div>
+          </div>
+      </section>
+
+    
+    </div>
+</div>
+</div>
+<script src="custom-js/admin-add.js"></script>
+<%- include('layouts/footer.ejs') %>

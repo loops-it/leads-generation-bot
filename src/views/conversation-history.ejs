@@ -1,0 +1,157 @@
+<%- include('layouts/header.ejs') %>
+<%- include('layouts/admin-nav.ejs') %>
+<!-- Content Wrapper. Contains page content -->
+<style>
+    .chat-box-six{
+        height: 600px;
+        overflow: auto;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="container-full">
+        <div class="content-header">
+            <div class="d-flex align-items-center">
+                <div class="me-auto">
+                    <h4 class="page-title">Bot Chat History</h4>
+                    <div class="d-inline-block align-items-center">
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                <li class="breadcrumb-item" aria-current="page">Bot Chat History</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+            <div class="col-xl-4 col-12">
+                <div class="box dash-chat" id="chat-bx">
+                    <div class="box-body p-0">
+                        <ul class="nav nav-tabs customtab nav-justified" role="tablist">
+                            <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab" href="#messages" role="tab">Chats <span class="badge badge-pill mx-5" id="chat-count">0</span> </a> </li>
+                          
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="messages" role="tabpanel">
+                               
+                                <div class="chat-box-six2" id="main_chats">
+
+                                   
+                                </div>
+                            </div>
+                            							
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8 col-12">
+                <div class="row">
+                    <div class="col-xl-12 col-12" id="show_messages">
+                       
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+      </section>
+
+    
+    </div>
+</div>
+</div>
+<input type="hidden" id="selected_chat_id" value="">
+<%- include('layouts/footer.ejs') %>
+<script>
+    function GetAllChats(message_id){
+    const message_data = {
+        message_id: message_id
+    }
+        fetch("get-chat-messages", {
+        method: "post",
+        body: JSON.stringify(message_data),
+        headers: {
+            "Content-Type" : "application/json"
+        }
+    }).then(res => res.json())
+    .then(data => {
+       if(data.status == "success"){
+        $('#show_messages').html(data.message);
+        document.getElementById("selected_chat_id").value =message_id;
+       }
+       else{
+        
+       }
+    })
+    }
+    function RefreshChats(){
+
+        fetch("refresh-chats", {
+        method: "post",
+        headers: {
+            "Content-Type" : "application/json"
+        }
+    }).then(res => res.json())
+    .then(data => {
+       if(data.status == "success"){
+        $('#main_chats').html(data.chats);
+        document.getElementById("chat-count").textContent=data.chatsCount;
+       }
+       else{
+        
+       }
+    })
+    }
+function RefreshChatHistory(){
+const message_id =  document.getElementById("selected_chat_id").value;
+if(message_id == ""){
+
+} 
+else{
+const message_data = {
+    message_id: message_id
+}
+fetch("refresh-selected-chat", {
+body: JSON.stringify(message_data),
+method: "post",
+headers: {
+    "Content-Type" : "application/json"
+}
+}).then(res => res.json())
+.then(data => {
+if(data.status == "success"){
+$('#show_messages').html(data.message);
+}
+else{
+
+}
+})
+}
+}
+
+function BotChatsOnload(){
+
+fetch("bot-chats-onload", {
+method: "post",
+headers: {
+    "Content-Type" : "application/json"
+}
+}).then(res => res.json())
+.then(data => {
+if(data.status == "success"){
+$('#main_chats').html(data.chats);
+document.getElementById("chat-count").textContent=data.chatsCount;
+}
+else{
+
+}
+})
+}
+BotChatsOnload();
+setInterval(RefreshChats, 5000);
+setInterval(RefreshChatHistory, 5000);
+</script>

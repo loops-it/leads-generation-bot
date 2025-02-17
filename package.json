@@ -1,0 +1,53 @@
+{
+  "name": "gpt_pinecone_node_typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@pinecone-database/pinecone": "^2.1.0",
+    "@types/node": "^20.11.30",
+    "nodemon": "^3.1.0",
+    "openai": "^4.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "@google-cloud/speech": "^6.6.1",
+    "@google-cloud/text-to-speech": "^5.3.0",
+    "@google-cloud/translate": "^8.2.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^4.17.21",
+    "@types/express-flash": "^0.0.5",
+    "@types/express-session": "^1.18.0",
+    "@types/google-translate-api": "^2.3.5",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/multer": "^1.4.11",
+    "@types/mysql": "^2.15.26",
+    "@types/pdf-parse": "^1.1.4",
+    "@types/sequelize": "^4.28.20",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.3",
+    "node-record-lpcm16": "^1.0.1",
+    "pdf-parse": "^1.1.1",
+    "sequelize": "^6.37.1"
+  }
+}

@@ -1,0 +1,82 @@
+<%- include('layouts/header.ejs') %>
+<%- include('layouts/admin-nav.ejs') %>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="container-full">
+      <!-- Content Header (Page header) -->	  
+      <div class="content-header">
+          <div class="d-flex align-items-center">
+              <div class="me-auto">
+                  <h4 class="page-title">Quick Questions</h4>
+                  <div class="d-inline-block align-items-center">
+                      <nav>
+                          <ol class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                              <li class="breadcrumb-item" aria-current="page">Quick Questions</li>
+                          </ol>
+                      </nav>
+                  </div>
+              </div>
+              
+          </div>
+      </div>
+
+      <!-- Main content -->
+      <section class="content">
+          <div class="row">
+            <div class="col-lg-12 col-12">
+                <div class="box">
+                  <div class="box-header with-border">
+                    <h4 class="box-title">Edit Question</h4>
+                  </div>
+                  <!-- /.box-header -->
+                  <form action="/quick-questions-edit" method="post">
+                      <div class="box-body">
+                        
+                          <div class="row">
+                            <% if (successMessage) { %>
+                                <div class="alert alert-success">
+                                  <%= successMessage %>
+                                </div>
+                              <% } else if (errorMessage) { %>
+                                <div class="alert alert-danger">
+                                  <%= errorMessage %>
+                                </div>
+                              <% } %>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="form-label">Question</label>
+                                <input type="text" class="form-control" placeholder="Question" name="question" value="<%= question_details.question %>" required>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="form-label">Answer</label>
+                                <input type="text" class="form-control" placeholder="Answer" name="answer" value="<%= question_details.answer %>" required>
+                              </div>
+                            </div>
+                            <input type="hidden"   name="id" value="<%= question_details.id %>">
+                          </div>
+                      </div>
+                      <!-- /.box-body -->
+                      <div class="box-footer">
+                         
+                          <button type="submit" class="btn btn-primary">
+                            <i class="ti-save-alt"></i> Save Questions
+                          </button>
+                      </div>  
+                  </form>
+                </div>
+                <!-- /.box -->			
+          </div>
+          </div>
+
+
+      </section>
+
+    
+    </div>
+</div>
+</div>
+<script src="custom-js/admin-add.js"></script>
+<%- include('layouts/footer.ejs') %>

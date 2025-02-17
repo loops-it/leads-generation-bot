@@ -1,0 +1,111 @@
+<%- include('layouts/header.ejs') %>
+<%- include('layouts/admin-nav.ejs') %>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="container-full">
+        <div class="content-header">
+            <div class="d-flex align-items-center">
+                <div class="me-auto">
+                    <h4 class="page-title">Agent Feedbacks</h4>
+                    <div class="d-inline-block align-items-center">
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                <li class="breadcrumb-item" aria-current="page">Agent Feedbacks</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+            <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-img bbsr-0 bber-0" style="background: url('../images/gallery/full/10.jpg') center center;" data-overlay="5">
+                  <h3 class="widget-user-username text-white"><%= agent[0].name %></h3>
+                  <h6 class="widget-user-desc text-white">AGENT</h6>
+                </div>
+                <div class="widget-user-image">
+                  <img class="rounded-circle" src="/uploads/<%= agent[0].profile_picture %>" alt="User Avatar">
+                </div>
+                <div class="box-footer">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="description-block">
+                        <h5 class="description-header"><%= chats.length %></h5>
+                        <span class="description-text">No of Reviews</span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <% 
+                    var rating_total = 0;
+                    for (var c = 0; c < chats.length; c++) { 
+                        rating_total = (rating_total+ parseFloat(chats[c].rating))
+                    }
+                        
+                     %>
+                    <div class="col-sm-6 be-1 bs-1">
+                      <div class="description-block">
+                        <h5 class="description-header"><%= (rating_total/parseFloat(chats.length)) %> out of 5</h5>
+                        <span class="description-text">Average Rating</span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                   
+                  </div>
+                  <!-- /.row -->
+                </div>
+              </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                      <h4 class="box-title">Feedbacks</h4>
+                    </div>
+                    <div class="box-body">
+                      <div class="table-responsive">
+                          <table id="example1" class="table table-bordered table-striped">
+                              <thead>
+                                  <tr>
+                                    <th >Chat ID</th>
+                                    <th >Language</th>
+                                    <th >Rating</th>
+                                    <th>Feedback</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                <% for (var i = 0; i < chats.length; i++) { %>
+                                   
+                                    <tr>
+                                        <td><b>#<%= chats[i].message_id %></b></td>
+                                        <td ><%= chats[i].language %></td>
+                                        <td ><%= chats[i].rating %> / 5</td>
+                                        <td ><%= chats[i].feedback %></td>
+                                    </tr>
+                                  <% } %>
+                                
+                               
+                            </tbody>
+                          </table>
+                      </div>
+                    </div>
+                    <!-- /.box-body -->
+                   
+                </div>
+            </div>
+           
+        </div>
+      </section>
+
+    
+    </div>
+</div>
+</div>
+<input type="hidden" id="selected_chat_id" value="">
+<%- include('layouts/footer.ejs') %>

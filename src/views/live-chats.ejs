@@ -1,0 +1,315 @@
+<%- include('layouts/header.ejs') %>
+<%- include('layouts/agent-nav.ejs') %>
+<style>
+.chatbox-holder {
+  position: fixed;
+  right: unset;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  height: 0;
+}
+.chatbox {
+  width: 350px;
+  height: 400px;
+  margin: 0 20px 0 0;
+  position: relative;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2);
+  display: flex;
+  flex-flow: column;
+  border-radius: 10px 10px 0 0;
+  background: white;
+  bottom: 0;
+  transition: .1s ease-out;
+}
+.chatbox-top {
+  position: relative;
+  display: flex;
+  padding: 10px 0;
+  border-radius: 10px 10px 0 0;
+  background: #6993ff ;
+}
+.chatbox-icons {
+  padding: 0 10px 0 0;
+  display: flex;
+  position: relative;
+}
+.chat-partner-name, .chat-group-name {
+  flex: 1;
+  padding: 0 0 0 20px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+  transition: .1s ease-out;
+}
+.chat-messages {
+  border-top: 1px solid rgba(0, 0, 0, .05);
+  padding: 10px;
+  overflow: auto;
+  display: unset;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  flex: 1;
+}
+.message-box-holder {
+  width: 100%;
+  margin: 0 0 15px;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+}
+.message-box {
+  padding: 6px 10px;
+  border-radius: 6px 0 6px 0;
+  position: relative;
+  background: rgba(100, 170, 0, .1);
+  border: 2px solid rgba(100, 170, 0, .1);
+  color: #6c6c6c;
+  font-size: 12px;
+}
+.message-box:after {
+  content: "";
+  position: absolute;
+  border: 10px solid transparent;
+  border-top: 10px solid rgba(100, 170, 0, .2);
+  border-right: none;
+  bottom: -22px;
+  right: 10px;
+}
+.chat-input-holder {
+  display: flex;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+}
+.chat-input {
+  resize: none;
+  padding: 5px 10px;
+  height: 35px;
+  font-family: 'Lato', sans-serif;
+	font-size: 14px;
+  color: #000;
+  flex: 1;
+  border: none;
+  background:#fff;
+   border-bottom: 1px solid rgba(0, 0, 0, .05);
+}
+.chat-input:focus, .message-send:focus {
+  outline: none;
+}
+.btn-success{
+position: relative !important;
+z-index: 0  !important;
+}
+</style>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="container-full">
+        <div class="content-header">
+            <div class="d-flex align-items-center">
+                <div class="me-auto">
+                    <h4 class="page-title">Live Chats</h4>
+                    <div class="d-inline-block align-items-center">
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                <li class="breadcrumb-item" aria-current="page">Live Chats</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+            <div class="col-xl-4 col-12">
+                <div class="box dash-chat" id="chat-bx">
+                    <div class="box-body p-0">
+                        <ul class="nav nav-tabs customtab nav-justified" role="tablist">
+                            <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab" href="#messages" role="tab">Chats <span class="badge badge-pill mx-5" id="chat-count">0</span> </a> </li>
+                          
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="messages" role="tabpanel">
+                               
+                                <div class="chat-box-six2" id="main_chats">
+
+                                   
+                                </div>
+                            </div>
+                            							
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8 col-12">
+                <div class="row">
+                    <div class="col-xl-12 col-12" id="show_messages">
+                       
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+            <div class="chatbox-holder" id="live-chats-container">
+ 
+                
+                
+        </div>
+      </section>
+
+    
+    </div>
+</div>
+</div>
+<input type="hidden" id="selected_chat_id" value="">
+<%- include('layouts/footer.ejs') %>
+<script>
+    function RefreshLiveChats(){
+    const message_data = {
+            agent_id :<%= agent_login_details.id %>
+    }
+    fetch("refresh-live-chats", {
+    method: "post",
+    body: JSON.stringify(message_data),
+    headers: {
+        "Content-Type" : "application/json"
+    }
+    }).then(res => res.json())
+    .then(data => {
+    if(data.status == "success"){
+    $('#main_chats').html(data.chats);
+    document.getElementById("chat-count").textContent=data.chatsCount;
+    }
+    else{
+    
+    }
+    })
+    }
+    function ReplayToLiveChat(message_id){
+    
+        const message_data = {
+            message_id: message_id,
+            agent_id :<%= agent_login_details.id %>
+        }
+            fetch("reply-to-live-chat", {
+            method: "post",
+            body: JSON.stringify(message_data),
+            headers: {
+                "Content-Type" : "application/json"
+            }
+        }).then(res => res.json())
+        .then(data => {
+           if(data.status == "success"){
+            const parentDiv = document.getElementById("live-chats-container");
+            const single_chat = data.message;
+            parentDiv.innerHTML += single_chat;
+           }
+           else{
+            
+           }
+        })
+        }
+    function CloseLiveChat(message_id){
+    
+    const message_data = {
+        chatId: message_id
+    }
+        fetch("close-live-chat", {
+        method: "post",
+        body: JSON.stringify(message_data),
+        headers: {
+            "Content-Type" : "application/json"
+        }
+    }).then(res => res.json())
+    .then(data => {
+       if(data.status == "success"){
+        const parentDiv = document.getElementById("live-chats-container");
+        const childDiv = document.getElementById("main-chat-"+message_id+"");
+        parentDiv.removeChild(childDiv);
+       }
+       else{
+        
+       }
+    })
+    }
+    function RefreshLiveChatsInner(message_id){
+    
+    const elements = document.querySelectorAll('.inner-live-chats');
+    for (let i = 0; i < elements.length; i++) {
+    
+    const message_id = elements[i].getAttribute('data-id');
+    
+    const message_data = {
+        message_id: message_id,
+        agent_id :<%= agent_login_details.id %>
+    }
+    fetch("refresh-live-chat-inner", {
+    body: JSON.stringify(message_data),
+    method: "post",
+    headers: {
+        "Content-Type" : "application/json"
+    }
+    }).then(res => res.json())
+    .then(data => {
+    if(data.status == "success"){
+    $('#live-chat-inner-'+message_id+'').html(data.message);
+    }
+    else{
+    
+    }
+    })
+    
+    }
+    }
+    
+    function ReplyChat(message_id){
+    var reply_message =  document.getElementById("agent-reply-message-"+message_id+"").value;
+    const message_data = {
+        message_id: message_id,
+        reply_message: reply_message
+    }
+        fetch("agent-reply-live-chat", {
+        method: "post",
+        body: JSON.stringify(message_data),
+        headers: {
+            "Content-Type" : "application/json"
+        }
+    }).then(res => res.json())
+    .then(data => {
+       if(data.status == "success"){
+        document.getElementById("agent-reply-message-"+message_id+"").value = "";
+       }
+       else{
+        
+       }
+    })
+    }
+function LiveChatsOnload(){
+const message_data = {
+            agent_id :<%= agent_login_details.id %>
+}
+fetch("live-chats-onload", {
+method: "post",
+body: JSON.stringify(message_data),
+headers: {
+    "Content-Type" : "application/json" 
+}
+}).then(res => res.json())
+.then(data => {
+if(data.status == "success"){
+$('#main_chats').html(data.chats);
+document.getElementById("chat-count").textContent=data.chatsCount;
+}
+else{
+
+}
+})
+}
+LiveChatsOnload();
+setInterval(RefreshLiveChats, 1000);
+setInterval(RefreshLiveChatsInner, 1000);
+    </script>
+    

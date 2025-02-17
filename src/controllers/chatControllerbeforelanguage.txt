@@ -1,0 +1,390 @@
+import OpenAI from "openai";
+import { Pinecone } from '@pinecone-database/pinecone'
+import "dotenv/config";
+import { Request as ExpressRequest, Response } from 'express';
+import File from '../../models/File';
+import BotChats from '../../models/BotChats';
+
+
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+if (!process.env.PINECONE_API_KEY || typeof process.env.PINECONE_API_KEY !== 'string') {
+    throw new Error('Pinecone API key is not defined or is not a string.');
+}
+const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
+
+interface RequestWithChatId extends ExpressRequest {
+    userChatId?: string;
+}
+
+export const chatResponse = async (req: RequestWithChatId, res: Response) => {
+
+    console.log("req : ", req.body.chatId)
+    const index = pc.index("dfccchatbot");
+    const namespace = index.namespace('hosting-cub-data')
+    //hosting-cub-data
+
+    let userChatId = req.body.chatId || "";
+    let language = req.body.language;
+    let selectedLanguage = 'en';
+    if (language == 'Sinhala') {
+        selectedLanguage = 'si'
+      }
+      else if (language === 'Arabic') {
+        selectedLanguage = 'ar'
+      }
+      else if (language === 'Tamil') {
+        selectedLanguage = 'ta'
+      }
+      else {
+        selectedLanguage = 'en'
+      }
+    try {
+
+        // chat id
+        if (!userChatId) {
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+            const day = ('0' + currentDate.getDate()).slice(-2);
+            const hours = ('0' + currentDate.getHours()).slice(-2);
+            const minutes = ('0' + currentDate.getMinutes()).slice(-2);
+            const seconds = ('0' + currentDate.getSeconds()).slice(-2);
+
+            const prefix = 'chat';
+            userChatId = `${prefix}_${year}${month}${day}_${hours}${minutes}${seconds}`;
+
+            console.log("Generated chat id : ", userChatId);
+
+        } else {
+            console.log("Existing chat id : ", userChatId);
+        }
+
+
+
+        //============= get question ======================
+        // get user message with history
+        let chatHistory = req.body.messages || [];
+
+
+        // Get the user question from the chat history
+        let userQuestion = "";
+        for (let i = chatHistory.length - 1; i >= 0; i--) {
+            if (chatHistory[i].role === "user") {
+                userQuestion = chatHistory[i].content;
+                break;
+            }
+        }
+        // console.log("userQuestion : ", userQuestion)
+
+        await BotChats.create(
+            { 
+            message_id: userChatId,
+            language: language,
+            message: userQuestion,
+            message_sent_by: 'customer',
+            viewed_by_admin: 'no',
+            },
+        );
+
+        let kValue = 2
+
+        //============= change context ======================
+        async function handleSearchRequest(userQuestion: string, kValue: number) {
+
+        
+
+            // ================================================================
+            // STANDALONE QUESTION GENERATE
+            // ================================================================
+            const filteredChatHistory = chatHistory.filter((item: { role: string; }) => item.role !== 'system');
+
+            const chatHistoryString = JSON.stringify(filteredChatHistory);
+
+
+            // If the question does not mentioned about what it is refering to, use conversation to give additional insight to the question.
+            
+            // If the question does not mentioned about what it is refering to, use conversation to give additional insight to the question, for example which loan it is refering to=======================================================================
+//             const questionRephrasePrompt = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question. If the question does not mentioned about what it is refering to, use conversation to give additional insight to the question, for example which loan it is refering to.  
+// ----------
+// CHAT HISTORY: {${chatHistoryString}}
+// ----------
+// FOLLOWUP QUESTION: {${userQuestion}}
+// ----------
+// Standalone question:`
+
+const questionRephrasePrompt = `As a senior banking assistant, kindly assess whether the FOLLOWUP QUESTION related to the CHAT HISTORY or if it introduces a new question. If the FOLLOWUP QUESTION is unrelated, refrain from rephrasing it. However, if it is related, please rephrase it as an independent query utilizing relevent keywords from the CHAT HISTORY, even if it is a question related to the calculation.
+----------
+CHAT HISTORY: {${chatHistoryString}}
+----------
+FOLLOWUP QUESTION: {${userQuestion}}
+----------
+Standalone question:`
+
+// As a senior banking assistant, kindly assess whether the follow-up question pertains to the ongoing conversation or if it introduces a new topic. If the follow-up question is unrelated, refrain from rephrasing it. However, if it is related, please rephrase it as an independent query utilizing pertinent keywords from the conversation history.
+            // =======================================================================
+            
+
+
+
+            const completionQuestion = await openai.completions.create({
+                model: "gpt-3.5-turbo-instruct",
+                prompt: questionRephrasePrompt,
+                max_tokens: 50,
+                temperature: 0,
+            });
+
+            // console.log("chatHistory : ", chatHistory);
+            // console.log("Standalone Question PROMPT :", questionRephrasePrompt)
+            console.log("Standalone Question :", completionQuestion.choices[0].text)
+
+
+
+
+            // =============================================================================
+            // create embeddings
+            const embedding = await openai.embeddings.create({
+                model: "text-embedding-ada-002",
+                input: completionQuestion.choices[0].text,
+            });
+            // console.log(embedding.data[0].embedding);
+
+
+
+
+            // =============================================================================
+            // query from pinecone
+            // console.log('K - ', kValue)
+            const queryResponse = await namespace.query({
+                vector: embedding.data[0].embedding,
+                topK: kValue,
+                includeMetadata: true,
+            });
+            // console.log("VECTOR RESPONSE : ",queryResponse.matches)
+
+
+
+
+            // =============================================================================
+            // get vector documents into one string
+            const results: string[] = [];
+            // console.log("CONTEXT : ", queryResponse.matches[0].metadata);
+            queryResponse.matches.forEach(match => {
+                if (match.metadata && typeof match.metadata.Title === 'string') {
+                    const result = `Title: ${match.metadata.Title}, \n Content: ${match.metadata.Text} \n \n `;
+                    results.push(result);
+                }
+            });
+            let context = results.join('\n');
+            // console.log("CONTEXT : ", context);
+
+
+
+            // set system prompt
+            // =============================================================================
+            if (chatHistory.length === 0 || chatHistory[0].role !== 'system') {
+                chatHistory.unshift({ role: 'system', content: '' });
+            }
+            chatHistory[0].content = `You are a helpful assistant and you are friendly. Your name is DFCC GPT. Answer user question Only based on given Context: ${context}, your answer must be less than 150 words. If it has math question relevent to given Context give calculated answer, If user question is not relevent to the Context just say "I'm sorry.. no information documents found for data retrieval.". Do NOT make up any answers and questions not relevant to the context using public information.`;
+            // console.log("Frontend Question : ", chatHistory);
+        }
+
+
+
+        // async function processRequest(userQuestion: string, userChatId: string) {
+        await handleSearchRequest(userQuestion, kValue);
+
+
+        // GPT response ===========================
+        const completion = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: chatHistory,
+            max_tokens: 180,
+            temperature: 0
+        });
+
+        let botResponse = completion.choices[0].message.content
+        // console.log("GPT : ", botResponse);
+
+        // if (botResponse === "I'm sorry.. information not provided."){
+        //     console.log("run again .....")
+        //     console.log("Run again with kValue = 3...");
+
+        //     await handleSearchRequest(userQuestion, 3);
+            
+        //     const completion = await openai.chat.completions.create({
+        //         model: "gpt-4",
+        //         messages: chatHistory,
+        //         max_tokens: 150,
+        //         temperature: 0
+        //     });
+    
+        //     let botResponse = completion.choices[0].message.content
+        //     console.log(" second try bot response : ", botResponse)
+        //     // add assistant to array
+        //     chatHistory.push({ role: 'assistant', content: botResponse });
+
+        //     console.log(" send chat id : ", userChatId)
+        //     // }
+        //     // await processRequest(userQuestion, userChatId);
+
+        //     res.json({ answer: botResponse, chatHistory: chatHistory, chatId: userChatId });
+        // } else{
+
+            // add assistant to array
+            chatHistory.push({ role: 'assistant', content: botResponse });
+
+            // console.log(" send chat id : ", userChatId)
+            // }
+            // await processRequest(userQuestion, userChatId);
+
+            await BotChats.create(
+                { 
+                message_id: userChatId,
+                language: language,
+                message: botResponse,
+                message_sent_by: 'bot',
+                viewed_by_admin: 'no',
+                },
+            );
+
+            res.json({ answer: botResponse, chatHistory: chatHistory, chatId: userChatId });
+        // }
+
+        
+
+    } catch (error) {
+        console.error("Error processing question:", error);
+        res.status(500).json({ error: "An error occurred." });
+    }
+
+
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const questionRephrasePrompt = `Follow these steps to answer the user queries.
+
+// Step 1: First find out followup question is referring to based on what conversation topic.
+
+// step 2: rephrase the follow up question to be a standalone question with the conversation topic. 
+
+// ----------
+// CHAT HISTORY: {${chatHistoryString}}
+// ----------
+// FOLLOWUP QUESTION: {${userQuestion}}
+// ----------
+// Standalone question:`
+
+
+
+
+
+
+
+
+// const fileIds  = await File.findAll({
+            //     attributes: ['file_id']
+            //   });
+
+            //   const ids = fileIds.map(file => file.file_id);
+            // const fetchResult = await index.namespace('hosting-cub-data').fetch(ids);
+            // const documents = Object.values(fetchResult.records).map(record => {
+            //     if (record.metadata) {
+            //         return record.metadata.Title;
+            //     }
+            //     return null;
+            // }).filter(title => title !== null); 
+            
+            // console.log(documents);
+
+            // =======================================================================
+//             const questionRephrasePrompt = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question. 
+// ----------
+// CHAT HISTORY: {${chatHistoryString}}
+// ----------
+// FOLLOWUP QUESTION: {${userQuestion}}
+// ----------
+// Standalone question:`
+// =======================================================================
+
+// const questionRephrasePrompt = `Given the following conversation and a follow up question, rephrase the follow up question with a insight regarding the topic discussed to be a standalone question. 
+// ----------
+// CHAT HISTORY: {${chatHistoryString}}
+// ----------
+// FOLLOWUP QUESTION: {${userQuestion}}
+// ----------
+// Standalone question:`
+
+// Give insight regarding the topic discussed.
+// const questionRephrasePrompt = `Given the following conversation and a follow up question, Give insight regarding the topic discussed. 
+// ----------
+// CHAT HISTORY: {${chatHistoryString}}
+// ----------
+// FOLLOWUP QUESTION: {${userQuestion}}
+// ----------
+// TOPIC:`
+            
+
+
+
+
+
+
+
+
+
+// get streaming data into a variable
+// let contentArray = [];
+// for await (const chunk of completion) {
+//   contentArray.push(chunk.choices[0].delta.content);
+// }
+// const chatTextHistory = contentArray.join('');
+
+
+// const randomString = Math.random().toString(36).substring(2, 15);
+// const prefix = 'chat';
+// userChatId = `${prefix}_${randomString}`;
+// console.log("Generated chat id : ", userChatId);

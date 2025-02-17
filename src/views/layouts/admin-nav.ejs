@@ -1,0 +1,219 @@
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+	
+  <div class="wrapper">
+      <div id="loader"></div>
+  
+    <header class="main-header">
+      <div class="d-flex align-items-center logo-box justify-content-start">	
+          <!-- Logo -->
+          <a href="/admin-dashboard" class="logo">
+            <!-- logo-->
+            
+            <div class="logo-lg">
+                <span class="light-logo">
+                  <img src="ale24-nrfb0.svg" alt="logo" style="width:80px;">
+                </span>
+                <span class="dark-logo">
+                  <img src="ale24-nrfb0.svg" alt="logo" style="width:80px;">
+                </span>
+            </div>
+          </a>	
+      </div>  
+      <!-- Header Navbar -->
+      <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <div class="app-menu">
+          <ul class="header-megamenu nav">
+              <li class="btn-group nav-item">
+                  <a href="#" class="waves-effect waves-light nav-link push-btn" data-toggle="push-menu" role="button">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/collapse.svg" class="img-fluid svg-icon" alt="">
+                  </a>
+              </li>
+             
+          </ul> 
+        </div>
+          
+        <div class="navbar-custom-menu r-side">
+          <ul class="nav navbar-nav">				
+              <li class="btn-group nav-item d-md-none d-block d-lg-inline-block">
+                  <a href="#" data-provide="fullscreen" class="waves-effect waves-light nav-link full-screen" title="Full Screen">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/fullscreen.svg" class="img-fluid svg-icon" alt="">
+                  </a>
+              </li>	  
+              
+            
+            <!-- User Account-->
+            <li class="dropdown user user-menu">
+              <a href="#" class="waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" title="User">
+                  <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/user.svg" class="rounded svg-icon" alt="" />
+              </a>
+              <ul class="dropdown-menu animated flipInX">
+                <!-- User image -->
+                <li class="user-header bg-img" style="background-image: url(/images/user-info.jpg)" data-overlay="3">
+                    <div class="flexbox align-self-center">					  
+                        <img src="/images/avatar2.png" class="float-start rounded-circle" alt="User Image">					  
+                      <!--<h4 class="user-name align-self-center">
+                        <span>Samuel Brus</span>
+                        <small>samuel@gmail.com</small>
+                      </h4>-->
+                    </div>
+                </li>
+                <!-- Menu Body -->
+                <li class="user-body">
+                  <a class="dropdown-item" href="/edit-admin?id=<%= admin_login_details.id %>"><i class="ion ion-person"></i> My Profile</a>
+                 
+                  <a class="dropdown-item" href="admin-logout"><i class="ion-log-out"></i> Logout</a>
+                  <div class="dropdown-divider"></div>
+                  <div class="p-10"><a href="/edit-admin?id=<%= admin_login_details.id %>" class="btn btn-sm btn-rounded btn-success">View Profile</a></div>
+                </li>
+              </ul>
+            </li>	
+              
+            <!-- Control Sidebar Toggle Button -->
+         
+          </ul>
+        </div>
+      </nav>
+    </header>
+    
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+      <!-- sidebar-->
+      <section class="sidebar position-relative">
+            <div class="multinav">
+            <div class="multinav-scroll" style="height: 100%;">	
+                <!-- sidebar menu-->
+                <ul class="sidebar-menu" data-widget="tree">
+                  <li class="">
+                    <a href="/admin-dashboard">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/dashboard.svg" class="svg-icon" alt="">
+                      <span>Dashboard</span>
+                    
+                    </a>					
+                   
+                  </li>
+                  <li class="treeview">
+                    <a href="#">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/forms1.svg" class="svg-icon" alt="">
+                      <span>Documents</span>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                      </span>
+                    </a>
+                    <ul class="treeview-menu">					
+                      <li class="">
+                          <a href="/upload-documents">
+                              <i class="ti-more"></i>Upload Document
+                          </a>
+                         
+                      </li>
+                      <li class="">
+                          <a href="/view-documents">
+                              <i class="ti-more"></i>All Documents
+                          </a>
+                         
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="treeview">
+                    <a href="#">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/apps.svg" class="svg-icon" alt="">
+                      <span>Admins</span>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                      </span>
+                    </a>
+                    <ul class="treeview-menu">					
+                      <li class="">
+                          <a href="/add-admin">
+                              <i class="ti-more"></i>Add Admin
+                          </a>
+                         
+                      </li>
+                      <li class="">
+                          <a href="/manage-admins">
+                              <i class="ti-more"></i>Mange Admins
+                          </a>
+                         
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="treeview">
+                    <a href="#">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/cards.svg" class="svg-icon" alt="">
+                      <span>Agents</span>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                      </span>
+                    </a>
+                    <ul class="treeview-menu">
+                      <li class="">
+                          <a href="/add-agent">
+                              <i class="ti-more"></i>Add Agent
+                           </a>
+                          
+                      </li>											  	
+                      <li class="">
+                          <a href="/manage-agents">
+                              <i class="ti-more"></i>Mange Agents
+                             
+                          </a>
+                         
+                      </li>					  	
+                     
+                    </ul>
+                  </li>	 
+                  <li class="">
+                    <a href="/quick-questions">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/miscellaneous.svg" class="svg-icon" alt="">
+                      <span>Quick Questions</span>
+                     
+                    </a>
+                  </li>
+                  <li class="">
+                    <a href="/conversation-history">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/authentication.svg" class="svg-icon" alt="">
+                      <span>Bot Chats History</span>
+                     
+                    </a>
+                  </li>
+                  <li class="">
+                    <a href="/live-chat-history">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/miscellaneous.svg" class="svg-icon" alt="">
+                      <span>Live Chats History</span>
+                     
+                    </a>
+                  
+                  </li>
+                  <!-- <li class="">
+                    <a href="/update-gold-rates">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/forms1.svg" class="svg-icon" alt="">
+                      <span>Update Gold Rates</span>
+                     
+                    </a>
+                  
+                  </li>  -->
+                  <!--<li class="">
+                    <a href="/video-chat-history">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/forms1.svg" class="svg-icon" alt="">
+                      <span>Video Chats History</span>
+                     
+                    </a>
+                  
+                  </li>  
+                  <li class="">
+                    <a href="/audio-chat-history">
+                      <img src="https://chat-bot-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/charts.svg" class="svg-icon" alt="">
+                      <span>Audio Chats History</span>
+                     
+                    </a>
+                  
+                  </li> -->
+                </ul>
+                
+               
+            </div>
+          </div>
+      </section>
+    </aside>
+      

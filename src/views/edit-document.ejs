@@ -1,0 +1,158 @@
+
+
+<%- include('layouts/header.ejs') %>
+<%- include('layouts/admin-nav.ejs') %>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="container-full">
+      <!-- Content Header (Page header) -->	  
+      <div class="content-header">
+          <div class="d-flex align-items-center">
+              <div class="me-auto">
+                  <h4 class="page-title">Edit Document</h4>
+                  <div class="d-inline-block align-items-center">
+                      <nav>
+                          <ol class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                              <li class="breadcrumb-item" aria-current="page">Edit Document</li>
+                          </ol>
+                      </nav>
+                  </div>
+              </div>
+              
+          </div>
+      </div>
+
+      <!-- Main content -->
+      <section class="content">
+          <div class="row">
+            <div class="col-lg-12 col-12">
+                <div class="box">
+                  <div class="box-header with-border">
+                    <h4 class="box-title">Document Details</h4>
+                  </div>
+                  <!-- /.box-header -->
+                  <form id="questionForm">
+                      <div class="box-body">
+                          
+                          <div class="row">
+                            <div class="alert alert-success mt-2" role="alert" id="success" style="display: none;">
+                       
+                            </div>
+                            <div class="alert alert-danger mt-2" role="alert" id="failed" style="display: none;">
+                             
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label class="form-label">Title</label>
+                                <input type="text" class="form-control"  id="title" name="title" required value="<%= metadata.Title %>">
+                              </div>
+                            </div>
+                            <!-- <div class="col-md-12">
+                              <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <input type="text" class="form-control"  id="category" name="category" value="<%= metadata.Category %>" required>
+                              </div>
+                            </div> -->
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label class="form-label">Select Document (pdf)</label>
+                                <input type="file" class="form-control"  id="file" name="file" >
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label class="form-label">Text</label>
+                                <textarea class="form-control "  rows="10" style="border-radius: 25px;" id="text" name="text" ><%= metadata.Text %></textarea>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <!-- /.box-body -->
+                      <div class="box-footer">
+                         
+                          <button type="submit" class="btn btn-primary">
+                            <i class="ti-save-alt"></i> Upload Document
+                          </button>
+                      </div>  
+                  </form>
+                </div>
+                <!-- /.box -->			
+          </div>
+          </div>
+      </section>
+
+    
+    </div>
+</div>
+</div>
+
+<%- include('layouts/footer.ejs') %>
+<script>
+    document.getElementById('questionForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+    
+      // Get the file input element
+      const fileInput = document.getElementById('file');
+      const title = document.getElementById('title').value;
+      const text = document.getElementById('text').value;
+      // const category = document.getElementById('category').value;
+
+      // Check if a file was selected
+      if (fileInput.files.length > 0) {
+        // Get the first file
+        const file = fileInput.files[0];
+    
+        // Create a FormData object
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('title', title);
+        formData.append('id', '<%= id %>');
+        formData.append('text', text);
+        // formData.append('category', category);
+        // Send file content to backend
+        sendToBackend(formData);
+      } else {
+        // No file selected, handle accordingly
+        const formData = new FormData();
+        formData.append('file', "");
+        formData.append('title', title);
+        formData.append('id', '<%= id %>');
+        formData.append('text', text);
+        // formData.append('category', category);
+        // Send file content to backend
+        sendToBackend(formData);
+      }
+    });
+    
+    function sendToBackend(formData) {
+      // Create a new XMLHttpRequest object
+      const xhr = new XMLHttpRequest();
+    
+      // Configure the request
+      xhr.open('POST', '/update-document', true);
+    
+      // Set up the callback function
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            // Request successful
+            // console.log('Response from backend:', xhr.responseText);
+            // document.getElementById('response-text').innerHTML = xhr.responseText;
+            document.getElementById('success').style.display = 'block';
+            document.getElementById('success').textContent = xhr.responseText;
+          } else {
+            // Request failed
+            // console.error('Error:', xhr.status);
+            // document.getElementById('response-text').innerHTML = xhr.status;
+            document.getElementById('success').style.display = 'block';
+            document.getElementById('success').textContent = xhr.status;
+          }
+        }
+      };
+    
+      // Send the request with the form data
+      xhr.send(formData);
+    }
+    </script>
+    

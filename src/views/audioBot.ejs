@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Hosting Cub Bot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
+  <link rel="icon" href="favicon.png" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+  <style>
+    .container {
+      width: 360px;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .bot-message {
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #595e62;
+      display: flex;
+      align-items: end;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+      align-items: start;
+    }
+
+    .bot-message .messageWrapper div {
+      border: none;
+      border-radius: 8px;
+      max-width: 280px;
+      /* width: max-content; */
+      padding: 10px;
+      border-top-left-radius: 0px;
+      font-size: 12px;
+      background-color: #1c73d4;
+      color: #fff !important;
+      display: flex;
+      flex-direction: column;
+      /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); */
+    }
+
+    .user-message {
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #595e62;
+      display: flex;
+      align-items: end;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: end;
+      align-items: end;
+    }
+
+    .user-message .messageWrapper div {
+      border: none;
+      border-radius: 10px;
+      max-width: 250px;
+      width: max-content;
+      padding: 10px;
+      border-bottom-right-radius: 0px;
+      margin-right: 0px;
+      font-size: 12px;
+      background-color: #f4f9ff;
+      display: flex !important;
+      justify-content: end !important;
+      text-align: start !important;
+    }
+
+    .rate-message {
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #595e62;
+      display: flex;
+      align-items: end;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      align-items: start;
+    }
+
+    .rate-message .messageWrapper div {
+      border: none;
+      border-radius: 8px;
+      max-width: 280px;
+      /* width: max-content; */
+      padding: 10px;
+      border-top-left-radius: 0px;
+      font-size: 12px;
+      background-color: #1c73d4;
+      color: #fff !important;
+      display: flex;
+      flex-direction: column;
+      /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); */
+    }
+
+    .user-message .message-image {
+      display: none;
+    }
+
+    /* .user-message div p{
+      width: 100%;
+    } */
+    .user-message .messageWrapper {
+      padding-right: 10px;
+      text-align: end;
+      align-self: end !important;
+    }
+
+    .user-message .messageWrapper .botname-message {
+      padding-right: 10px;
+      text-align: end;
+      align-self: end !important;
+    }
+
+    .background {
+      background: transparent;
+    }
+
+    #response {
+      width: 100%;
+      padding: 0px;
+      background-color: #fff;
+      border-radius: 25px;
+      height: 350px;
+      overflow: auto;
+      position: relative;
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+
+      /* Hide scrollbar for WebKit browsers */
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* Internet Explorer 10+ */
+    }
+
+    #response::-webkit-scrollbar {
+      display: none;
+    }
+
+    .message-image {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      margin-top: 10px;
+      border-radius: 50%;
+    }
+
+    .chat-submit-button {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background-color: transparent;
+      border-radius: 100%;
+      color: #1c73d4;
+      /* color: #BFBFBF; */
+      padding: 10px;
+      font-size: 20px;
+      line-height: 20px;
+      font-family: "Poppins", sans-serif;
+      border: solid 1px #1c73d4;
+    }
+
+    .chat-submit-button:hover {
+      background-color: transparent;
+    }
+
+    #questionForm {
+      position: relative;
+      padding: 10px;
+      padding-top: 0px;
+    }
+
+    .chat-header {
+      background-color: #1c73d4;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .chat-container {
+      padding: 10px;
+    }
+
+    .chat-input {
+      line-height: 30px;
+      border-radius: 0px;
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      padding-right: 45px !important;
+      border: none !important;
+    }
+
+    .chat-input:focus {
+      outline: none !important;
+      box-shadow: none;
+    }
+
+    .chat-input::placeholder {
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      color: #bfbfbf;
+    }
+
+    .language-buttons button {
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      border-radius: 15px;
+      background-color: #2a0e45;
+      border: none;
+      color: #fff;
+      width: 100%;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    @media screen and (max-width: 600px) {
+      .background {
+        /* padding: 5px !important; */
+        margin-top: 10px;
+      }
+
+      .container {
+        width: 100% !important;
+        margin: 10px;
+        position: relative !important;
+        border: none;
+        border-radius: 8px;
+        height: 99vh;
+      }
+
+      #response {
+        width: 100%;
+        height: calc(100svh - 170px) !important;
+      }
+
+      #questionForm {
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        padding: 10px;
+        padding-top: 0px;
+      }
+    }
+
+    .closeButton {
+      background-color: transparent;
+      border: none;
+      border-radius: 100%;
+      font-size: 16px;
+      line-height: 16px;
+      width: 25px;
+      height: 25px;
+      color: #fff;
+      margin-right: 20px;
+      text-align: center;
+      padding: 0px;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes visible {
+      0% {
+        visibility: hidden;
+      }
+
+      100% {
+        visibility: visible;
+      }
+    }
+
+    .loading {
+      animation: fadeIn 0.5s ease-in-out infinite alternate,
+        visible 0.5s ease-in-out infinite alternate;
+    }
+
+    .typingmsg-wrapper {
+      background-color: #fff;
+      color: #000;
+    }
+
+    .typing-msg {
+      color: #000;
+      font-size: 25px;
+      padding: 5px !important;
+    }
+
+    .error-message {
+      background-color: #2a0e459c;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px !important;
+      margin-top: 10px;
+    }
+
+    #questionButtons button {
+      margin-bottom: 10px;
+    }
+
+    #questionButtons li {
+      color: #595e62;
+      font-size: 12px;
+      margin: 10px 0px 0px 0px;
+    }
+
+    .chatDetails p {
+      color: #fff;
+      font-weight: 600;
+      font-size: 18px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .chatDetails span {
+      color: #fff;
+      font-weight: 300;
+      font-size: 11px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .botname-message {
+      color: #bfbfbf;
+      font-weight: 400;
+      font-size: 10px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .quickQuestionButton {
+      background-color: #1c73d4;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+      font-weight: 400;
+      font-size: 12px;
+      font-family: "Poppins", sans-serif;
+      padding: 8px;
+      text-align: start;
+    }
+
+    .quickQuestionButton i {
+      font-size: 20px;
+      padding-left: 10px;
+    }
+
+    .powerdTextBox {
+      background-color: #f7f7f7;
+      border-radius: 4px;
+    }
+
+    .powerdTextBox p {
+      color: #bfbfbf;
+      font-weight: 300;
+      font-size: 12px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .powerdTextBox span {
+      color: #1c73d4;
+      font-weight: 600;
+    }
+
+    .liveagentBtn {
+      background-color: #fff;
+      border-radius: 5px;
+      border: none;
+      color: #1c73d4;
+      font-weight: 400;
+      font-size: 12px;
+      font-family: "Poppins", sans-serif;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .btnNotoClose,
+    .btnYesToClose {
+      background-color: #1c73d4;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+      font-weight: 400;
+      font-size: 12px;
+      font-family: "Poppins", sans-serif;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .messageSubmitForm {}
+
+    .star-rating-form {
+      width: 280px;
+      border: solid 1px #1c73d4;
+    }
+
+    .rating-icon {
+      color: gold;
+    }
+
+    .btnRatingView {
+      background-color: #fff;
+      border-radius: 5px;
+      border: none;
+      color: #1c73d4;
+      font-weight: 400;
+      font-size: 12px;
+      font-family: "Poppins", sans-serif;
+      padding: 8px;
+      text-align: center;
+      min-width: 80px;
+    }
+  </style>
+</head>
+
+<body class="background">
+  <div class="container my-0 p-0">
+    <div class="d-flex chat-header w-100 py-2 text-center justify-content-between align-items-center">
+      <div class="d-flex flex-row">
+        <div class="d-flex ps-3 pe-2 py-1 position-relative">
+          <img src="/agent.png" alt="" class="" style="height: 60px; width: auto" />
+          <span class="position-absolute start-100 translate-middle p-1 rounded-circle" style="
+                background-color: rgb(5, 233, 5);
+                bottom: 0;
+                margin-left: -20px !important;
+              ">
+            <span class="visually-hidden">New alerts</span>
+          </span>
+        </div>
+        <div class="d-flex flex-column chatDetails align-items-start justify-content-center">
+          <p class="mb-0">Hosting Cub Assistant</p>
+          <span class="mb-0">Online</span>
+        </div>
+      </div>
+      <button class="closeButton" onclick="chatCloseByUser()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="d-flex chat-container">
+      <div id="response" class="">
+        <div class="d-flex justify-content-center align-items-center">
+          <!-- <img src="../chat-logo.webp" alt="" class="px-3 py-2 mb-3"> -->
+        </div>
+        <div class="bot-message">
+          <img class="message-image" src="/agent.png" />
+
+          <div class="messageWrapper">
+            <span class="botname-message" id="OpenedTime1">ChatBot</span>
+            <div>
+              <p class="mb-0">Hi, How can I help you today!</p>
+            </div>
+          </div>
+        </div>
+        <div class="bot-message">
+          <img class="message-image" src="/agent.png" />
+
+          <div class="messageWrapper">
+            <span class="botname-message" id="OpenedTime2"></span>
+            <div>
+              <p class="mb-0">Here's few ways to start with us.</p>
+            </div>
+            <span id="questionButtons" class="d-flex flex-column w-100 p-0 m-0 mt-2">
+            </span>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div id="transcript"></div>
+        </div>
+      </div>
+    </div>
+    <!-- <form id="questionForm" style="border-top: solid 1px #e0e0e0; padding-top: 10px;">
+            <input class="form-control chat-input" placeholder="Write message here..." id="question" name="question"></input> -->
+    <!-- <button type="submit" class="btn btn-light btn-lg chat-submit-button" id="recordButton">
+                    <i class="bi bi-mic-fill" id="micIcon"></i>
+                </button> -->
+    <!-- Start Recording Button -->
+    <!-- <button type="button" class="btn btn-light btn-lg chat-submit-button" id="startRecording">
+            <i class="bi bi-mic-fill" id="micIcon"></i> 
+        </button> -->
+
+    <!-- Stop Recording Button (Initially Hidden) -->
+    <!-- <button type="button" class="btn btn-light btn-lg chat-submit-button" id="stopRecording" style="display: none;">
+            <i class="bi bi-stop-fill" id="stopIcon"></i>
+        </button> -->
+    <button id="startRecording" class="btn btn-light btn-lg chat-submit-button">
+      <i id="startRecordingIcon" class="bi bi-mic-fill"></i>
+    </button>
+    <!-- </form> -->
+    <!-- <div class="d-flex px-3 pt-0 pb-2 w-100 justify-content-center align-items-center">
+      <div class="d-flex flex-row py-2 powerdTextBox text-center w-100 justify-content-center align-items-center">
+        <p class="mb-0">Powered By : <span>KodeTech</span></p>
+      </div>
+    </div> -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+
+  <script>
+    var quickQuestions = [];
+      <% for (var i = 0; i < questions.length; i++) { %>
+      quickQuestions.push({
+        question: "<%= questions[i].question %>",
+        answer: "<%= questions[i].answer %>"
+      });
+      <% } %>
+
+      //         console.log("quickQuestions : ", quickQuestions);
+
+      //     var redeemQuestions = quickQuestions.filter(function (qa) {
+      //         return qa.question === "What is Thyaga?";
+      //     });
+      //     var purchaseQuestions = quickQuestions.filter(function (qa) {
+      //         return qa.question === "How can I purchase the Thyaga voucher?" || qa.question === "Are there any alternative methods for purchasing Thyaga vouchers other than through the website?";
+      //     });
+      //     var merchantsQuestions = quickQuestions.filter(function (qa) {
+      //         return qa.question === "Does Thyaga offer a pick-up option? If yes, where is the pick-up location?" || qa.question === "What are the different ways I can send a Thyaga voucher?";
+      //     });
+      //     console.log("quickQuestions : ", filteredQuestions);
+
+
+      //     var questionButtonsContainer = document.getElementById("questionButtons");
+
+      //     quickQuestions.forEach(function (qa) {
+      //         var button = document.createElement("button");
+      //         button.classList.add('quickQuestionButton', 'my-1');
+      //         button.innerHTML = `
+      //     <span class="d-flex flex-row justify-content-between align-items-center">
+      //       <span>${qa.question}</span>
+      //       <i class="bi bi-arrow-right-square-fill"></i>
+      //     </span>
+      // `;
+      //         button.addEventListener("click", function () {
+      //             appendMessageToResponse('quickQuestion', qa.question);
+      //             appendMessageToResponse('quickAnswer', qa.answer);
+      //         });
+      //         questionButtonsContainer.appendChild(button);
+      //     });
+
+      console.log("quickQuestions : ", quickQuestions);
+
+    // Filter the questions into categories
+    var redeemQuestions = quickQuestions.filter(function (qa) {
+      return qa.question === "What is Thyaga?";
+    });
+    var purchaseQuestions = quickQuestions.filter(function (qa) {
+      return qa.question === "How can I purchase the Thyaga voucher?" || qa.question === "Are there any alternative methods for purchasing Thyaga vouchers other than through the website?";
+    });
+    var merchantsQuestions = quickQuestions.filter(function (qa) {
+      return qa.question === "Does Thyaga offer a pick-up option? If yes, where is the pick-up location?" || qa.question === "What are the different ways I can send a Thyaga voucher?";
+    });
+
+    var questionButtonsContainer = document.getElementById("questionButtons");
+
+    // Function to create and append buttons for each category
+    function createCategorySection(title, questions) {
+      var categoryTitle = document.createElement("li");
+      categoryTitle.innerText = title;
+      questionButtonsContainer.appendChild(categoryTitle);
+
+      questions.forEach(function (qa) {
+        var button = document.createElement("button");
+        button.classList.add('quickQuestionButton', 'my-1');
+        button.innerHTML = `
+                      <span class="d-flex flex-row justify-content-between align-items-center">
+                        <span>${qa.question}</span>
+                        <i class="bi bi-arrow-right-square-fill"></i>
+                      </span>
+                  `;
+        button.addEventListener("click", function () {
+          // Display the user's question
+          appendMessageToResponse('quickQuestion', qa.question);
+          // Display the corresponding answer
+          appendMessageToResponse('quickAnswer', qa.answer);
+        });
+        questionButtonsContainer.appendChild(button);
+      });
+    }
+
+    // Create and append sections for each category
+    createCategorySection("Redeem Questions", redeemQuestions);
+    createCategorySection("Purchase Questions", purchaseQuestions);
+    createCategorySection("Merchants Questions", merchantsQuestions);
+
+    // quick questions ============================================================
+  </script>
+  <script src="../scripts/audioBotScript.js" type="text/javascript"></script>
+
+  <!-- <script>
+        let mediaRecorder;
+        let audioChunks = [];
+
+        document.getElementById('startRecording').addEventListener('click', async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                audioChunks = [];
+
+                const formData = new FormData();
+                formData.append('audio', audioBlob);
+
+                const response = await fetch('/recording-start', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const transcript = await response.json();
+                document.getElementById('transcript').innerText = transcript.text;
+            };
+
+            mediaRecorder.start();
+        });
+
+        document.getElementById('stopRecording').addEventListener('click', () => {
+            mediaRecorder.stop();
+        });
+    </script> -->
+</body>
+
+</html>
