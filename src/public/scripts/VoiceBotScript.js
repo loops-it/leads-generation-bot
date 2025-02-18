@@ -176,7 +176,7 @@ function showEndChatAlertBot() {
 
 // Function - start rating
 function handleEndChatBot() {
-  showAlertSuccess("Gracias por chatear con nosotras.");
+  showAlertSuccess("Thank you for chatting with us.");
 }
 
 // Function - handle ending the chat
