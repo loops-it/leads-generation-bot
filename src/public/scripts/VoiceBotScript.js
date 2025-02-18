@@ -109,10 +109,10 @@ function showEndChatAlert() {
     );
     alertDiv.setAttribute("role", "alert");
     alertDiv.innerHTML = `
-                Parece que no has enviado ningún mensaje durante un tiempo. ¿Quieres finalizar el chat?
+                It looks like you haven't sent any messages for a while. Do you want to end the chat?
                 <div class="d-flex flex-row">
-                  <button type="button" class="btnYesToClose closeratingbot" onclick="handleEndChatBot()">Sí</button>
-                  <button type="button" class="btnNotoClose ms-2" data-bs-dismiss="alert">Cancelar</button>
+                  <button type="button" class="btnYesToClose closeratingbot" onclick="handleEndChatBot()">Yes</button>
+                  <button type="button" class="btnNotoClose ms-2" data-bs-dismiss="alert">No</button>
                 </div>
             `;
     responseDiv.appendChild(alertDiv);
@@ -136,10 +136,10 @@ function showEndChatAlertAgent() {
     );
     alertDiv.setAttribute("role", "alert");
     alertDiv.innerHTML = `
-                ¿Estás seguro de que deseas cerrar este chat? ¿Quieres finalizar el chat?
+                Are you sure you want to close this chat? Do you want to end the chat?
                 <div class="d-flex flex-row">
-                  <button type="button" class="btnYesToClose btn-end-chat closeRateAgent" onclick="handleEndChat()">Sí</button>
-                  <button type="button" class="btnNotoClose ms-2" data-bs-dismiss="alert">Cancelar</button>
+                  <button type="button" class="btnYesToClose btn-end-chat closeRateAgent" onclick="handleEndChat()">Yes</button>
+                  <button type="button" class="btnNotoClose ms-2" data-bs-dismiss="alert">No</button>
                 </div>
             `;
     responseDiv.appendChild(alertDiv);
@@ -163,10 +163,10 @@ function showEndChatAlertBot() {
     );
     alertDiv.setAttribute("role", "alert");
     alertDiv.innerHTML = `
-                ¿Estás seguro de que deseas cerrar este chat? ¿Quieres finalizar el chat?
+                Are you sure you want to close this chat? Do you want to end the chat?
                 <div class="d-flex flex-row">
-                  <button type="button" class="btnYesToClose abc btn-end-chat" onclick="handleEndChatBot()" >Sí</button>
-                  <button type="button" class="btnNotoClose ms-2" data-bs-dismiss="alert">Cancelar</button>
+                  <button type="button" class="btnYesToClose abc btn-end-chat" onclick="handleEndChatBot()" >Yes</button>
+                  <button type="button" class="btnNotoClose ms-2" data-bs-dismiss="alert">No</button>
                 </div>
             `;
     responseDiv.appendChild(alertDiv);
@@ -202,7 +202,7 @@ function appendMessageToResponse(role, content, data, isRatingForm = false) {
     appendListContent(messageDiv, content);
   } else if (
     content.includes(
-      "Se seleccionará el agente de marketing."
+      "A marketing agent will be selected."
     )
   ) {
     appendLiveAgentContent(messageDiv, content, data);
@@ -280,11 +280,11 @@ function appendLiveAgentContent(messageDiv, content, data) {
   messageDiv.innerHTML = `<div class="messageWrapper">
       <span class="botname-message">${formattedTime}</span>
       <div class="d-flex flex-column">
-        <input type="text" placeholder="Su nombre" id="title" class="mb-2 p-1 formLegalCRM">
-        <input type="tel" placeholder="Número de teléfono" id="phone" class="mb-2 p-1 formLegalCRM">
-        <input type="email" name="email" placeholder="Dirección de correo electrónico" id="email" class="mb-2 p-1 formLegalCRM">
-        <input type="text" name="message" placeholder="mensaje" id="message" class="mb-2 p-1 formLegalCRM">
-        <button id="LiveAgentButton" class="liveagentBtn">Entregar</button>
+        <input type="text" placeholder="Your name" id="title" class="mb-2 p-1 formLegalCRM">
+        <input type="tel" placeholder="Phone number" id="phone" class="mb-2 p-1 formLegalCRM">
+        <input type="email" name="email" placeholder="Email Address" id="email" class="mb-2 p-1 formLegalCRM">
+        <input type="text" name="message" placeholder="Message" id="message" class="mb-2 p-1 formLegalCRM">
+        <button id="LiveAgentButton" class="liveagentBtn">Submit</button>
         <div>${content}</div>
       </div>
     </div>`
@@ -305,11 +305,11 @@ function handleLiveAgentButtonClick(data) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!phonePattern.test(phone)) {
-      showAlert("Por favor ingrese un número de teléfono válido (10 dígitos).");
+      showAlert("Please enter a valid phone number (10 digits).");
       return;
     }
     if (!emailPattern.test(email)) {
-      showAlert("Por favor ingrese una dirección de correo electrónico válida.");
+      showAlert("Please enter a valid email address.");
       return;
     }
 
@@ -335,18 +335,18 @@ function handleLiveAgentButtonClick(data) {
 
       if (response.ok) {
         // Handle successful response
-        showAlert(" ¡Prospecto creado exitosamente!");
+        showAlert("Lead created successfully!");
         document.getElementById("title").value = '';
         document.getElementById("email").value = '';
         document.getElementById("phone").value = '';
         document.getElementById("message").value = '';
       } else {
         // Handle error response
-        showAlert("Error al crear cliente potencial: " + responseData.message);
+        showAlert("Error creating lead: " + responseData.message);
       }
     } catch (error) {
       console.error("Error sending lead data:", error);
-      showAlert("Ocurrió un error. Inténtalo de nuevo más tarde.");
+      showAlert("An error occurred. Please try again later.");
     }
   };
 }
@@ -387,22 +387,22 @@ function showOfflineForm() {
               <div>Our agents are offline. Please submit your message:</div>
               <form id="offlineForm">
                   <div class="mb-3">
-                      <label for="name" class="form-label">Su nombre</label>
+                      <label for="name" class="form-label">Your name</label>
                       <input type="text" class="form-control" id="name" required>
                   </div>
                   <div class="mb-3">
-                      <label for="email" class="form-label">Correo electrónico</label>
+                      <label for="email" class="form-label">Email</label>
                       <input type="email" class="form-control" id="email" required>
                   </div>
                   <div class="mb-3">
-                      <label for="subject" class="form-label">Título</label>
+                      <label for="subject" class="form-label">Subject</label>
                       <input type="text" class="form-control" id="subject" required>
                   </div>
                   <div class="mb-3">
-                      <label for="message" class="form-label">Mensaje</label>
+                      <label for="message" class="form-label">Message</label>
                       <textarea class="form-control" id="message" rows="3" required></textarea>
                   </div>
-                  <button type="submit" class="btnNotoClose">Entregar</button>
+                  <button type="submit" class="btnNotoClose">Submit</button>
               </form>
           </div>
       </div>
@@ -437,15 +437,15 @@ async function handleOfflineFormSubmission(event) {
 
     if (response.ok) {
       showAlert(
-        "Su mensaje ha sido enviado con éxito. Nuestro equipo se pondrá en contacto con usted en breve."
+        "Your message has been sent successfully. Our team will contact you shortly."
       );
     } else {
-      showAlert("No se pudo enviar su mensaje. Inténtelo nuevamente más tarde.");
+      showAlert("Your message could not be sent. Please try again later.");
     }
   } catch (error) {
     console.error("Error submitting offline form:", error);
     showAlert(
-      "Se produjo un error al enviar su mensaje. Inténtelo nuevamente más tarde."
+      "An error occurred while sending your message. Please try again later."
     );
   }
 }
@@ -473,7 +473,7 @@ function startCheckingForAgent(data) {
           if (dataLiveAgent.agent_id !== "unassigned") {
             if (!agentJoined) {
               showAlert(
-                "Ahora estás chateando con el ID del agente:" +
+                "You are now chatting with the agent ID:" +
                 dataLiveAgent.agent_name
               );
               agentJoined = true;
@@ -500,8 +500,8 @@ function startCheckingForAgent(data) {
   setTimeout(() => {
     clearInterval(intervalId);
     if (!agentJoined) {
-      showAlert("Todos los agentes están ocupados. Inténtelo nuevamente más tarde.");
-      console.log("No hay agentes disponibles. Llamada API detenida.");
+      showAlert("All agents are busy. Please try again later.");
+      console.log("No agents available. API call stopped.");
     }
   }, 120000);
 }
@@ -540,7 +540,7 @@ function appendPlainTextContent(messageDiv, content) {
 function appendRatingForm(messageDiv) {
   const ratingFormHTML = `
           <div class="star-rating-form d-flex flex-column px-2 py-3 mt-3" style="margin-bottom: 10px;">
-            <label for="rating">Califica tu experiencia:</label>
+            <label for="rating">Rate your experience</label>
             <div class="rating-icons d-flex flex-row" style="border: none !important;">
               <i class="bi bi-star rating-icon"></i>
               <i class="bi bi-star rating-icon"></i>
@@ -557,7 +557,7 @@ function appendRatingForm(messageDiv) {
   messageDiv.innerHTML = `<div class="messageWrapper">
         <span class="botname-message">${formattedTime}</span>
         <div class="ratingFormTest">
-          <p class="mb-0">Por favor califica tu experiencia en el chat:</p>
+          <p class="mb-0">Please rate your experience:</p>
         </div>
         ${ratingFormHTML}
       </div>`;
