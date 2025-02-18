@@ -718,7 +718,7 @@ document
 
         // Show record button
         document.getElementById("startRecording").style.display = "block";
-        document.getElementById("questionForm").style.width = "85%";
+        document.getElementById("questionForm").style.width = "100%";
       } catch (error) {
         console.error("Error submitting question:", error);
         // Handle error message
