@@ -322,7 +322,7 @@ function handleLiveAgentButtonClick(data) {
     };
 
     try {
-      const response = await fetch("https://projects.genaitech.dev/laravel-crm/api/create-lead", {
+      const response = await fetch("https://projects.genaitech.dev/crm-demo/api/create-lead", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
