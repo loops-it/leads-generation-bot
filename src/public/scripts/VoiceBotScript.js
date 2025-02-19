@@ -674,7 +674,7 @@ document
     let chatId = localStorage.getItem("chatId");
     const requestBody = {
       chatId: chatId,
-      messages: chatHistory,
+      messages: chatHistory.slice(-5),
       language: selectedLanguage || "English",
     };
     const requestBodyAgent = {
